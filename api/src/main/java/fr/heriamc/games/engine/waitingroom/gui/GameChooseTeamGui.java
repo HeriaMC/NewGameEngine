@@ -1,0 +1,66 @@
+package fr.heriamc.games.engine.waitingroom.gui;
+
+import fr.heriamc.bukkit.utils.ItemBuilder;
+import fr.heriamc.games.engine.Game;
+import fr.heriamc.games.engine.player.GamePlayer;
+import fr.heriamc.games.engine.team.GameTeam;
+import fr.heriamc.games.engine.utils.item.GameSkull;
+import fr.heriamc.games.engine.utils.newgui.NewGameGui;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
+
+public abstract class GameChooseTeamGui<M extends Game<G, T, ?>, G extends GamePlayer<T>, T extends GameTeam<G>> extends NewGameGui<M, G, T> {
+
+    private static final int[] fill = new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25 };
+    private static final ItemBuilder random = new ItemBuilder(Material.SKULL_ITEM, 1, (short) 3).setName("§fAléatoire").setCustomHeadData(GameSkull.DICE.getData());
+
+    private final ItemBuilder randomItem;
+
+    public GameChooseTeamGui(M game, G gamePlayer) {
+        super(game, gamePlayer, "Équipes", 36, true);
+        this.randomItem = random.onClick(event -> {
+            game.addPlayerToRandomTeam(gamePlayer);
+            updateMenu();
+        });
+    }
+
+    @Override
+    public void contents(Inventory inventory) {
+        setBorder(inventory, getTeam() != null ? getTeam().getColor().getDyeColor().getData() : DyeColor.WHITE.getData());
+        insertInteractItem(inventory, 31, randomItem);
+
+        for (int i = 0; i < fill.length; i++) {
+            if (i >= game.getTeams().size()) continue;
+
+            final var team = game.getTeams().get(i);
+
+            if (team != null)
+                insertInteractItem(inventory, fill[i], getTeamButton(team));
+        }
+    }
+
+    public ItemBuilder getTeamButton(T team) {
+        final var builder = new ItemBuilder(Material.WOOL, 1, team.getColor().getDyeColor().getWoolData())
+                .setName(team.getColoredName())
+                .onClick(event -> {
+                    if (getTeam() != null && getTeam().equals(team)) return;
+
+                    if (team.canJoin()) {
+                        game.addPlayerToTeam(gamePlayer, team);
+                        updateMenu();
+                    }
+                });
+
+        for (G member : team.getMembers())
+            builder.addLore("§7- " + member.getName());
+
+        builder.addLore(" ");
+        builder.addLore(team.isMember(gamePlayer)
+                ? "§8■ §cVous êtes déjà dans cette équipe"
+                : "§8■ §eCliquez pour rejoindre");
+
+        return builder;
+    }
+
+}

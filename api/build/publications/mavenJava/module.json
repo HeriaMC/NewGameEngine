@@ -1,0 +1,80 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "fr.heria.games.engine",
+    "module": "api",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "api-1.0.0.jar",
+          "url": "api-1.0.0.jar",
+          "size": 183187,
+          "sha512": "77423ad2795aab3ddb2948ea17751be6080cb4efea9392f02a18b2ba4d0bc4ea028af7e431872743b6805dafeb709a6e34f7a3a1f174f1ccf6b28d2f708c8ed7",
+          "sha256": "d71c3ce3d8cbadc643dbd22d1e463b517f1a692008ce778467636229a63a2a01",
+          "sha1": "2087a20062045c867cdeaf0c1ba8bfd544063b55",
+          "md5": "2508e6209c874df242a47df12fa6e88d"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "api-1.0.0.jar",
+          "url": "api-1.0.0.jar",
+          "size": 183187,
+          "sha512": "77423ad2795aab3ddb2948ea17751be6080cb4efea9392f02a18b2ba4d0bc4ea028af7e431872743b6805dafeb709a6e34f7a3a1f174f1ccf6b28d2f708c8ed7",
+          "sha256": "d71c3ce3d8cbadc643dbd22d1e463b517f1a692008ce778467636229a63a2a01",
+          "sha1": "2087a20062045c867cdeaf0c1ba8bfd544063b55",
+          "md5": "2508e6209c874df242a47df12fa6e88d"
+        }
+      ]
+    },
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "api-1.0.0-all.jar",
+          "url": "api-1.0.0-all.jar",
+          "size": 183187,
+          "sha512": "f0c59c17e88e783c211c9f1d7f4f3d70f82763e7828c50913a74fa86e70b55724e770953ffdc1480fc46a67bd65d9f3c307878c6b4ec363beb58ddf57a1448ea",
+          "sha256": "7a89a3b0862d319d3a50a04b1a9970d9f95f4b999d11f10a84cba56fb88c2b53",
+          "sha1": "63aba6580b8b8fea172516f072cfdf823a77bfe6",
+          "md5": "ee220fac5a3a96fca0055b8000cbab76"
+        }
+      ]
+    }
+  ]
+}

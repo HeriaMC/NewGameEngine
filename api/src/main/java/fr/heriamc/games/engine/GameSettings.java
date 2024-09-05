@@ -1,0 +1,57 @@
+package fr.heriamc.games.engine;
+
+import fr.heriamc.games.engine.board.GameBoard;
+import fr.heriamc.games.engine.board.GameBoardManager;
+import fr.heriamc.games.engine.map.MapManager;
+import fr.heriamc.games.engine.player.BaseGamePlayer;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Getter
+@Setter
+@Accessors(chain = true)
+public abstract class GameSettings<M extends MapManager<?>> {
+
+    private final GameSize gameSize;
+
+    private M gameMapManager;
+
+    private GameBoardManager boardManager;
+
+    public GameSettings(GameSize gameSize) {
+        this.gameSize = gameSize;
+    }
+
+    public GameSettings(GameSize gameSize, GameBoardManager boardManager) {
+        this(gameSize);
+        this.boardManager = boardManager;
+    }
+
+    public Optional<M> getMapManagerOptional() {
+        return Optional.ofNullable(gameMapManager);
+    }
+
+    public GameBoard<?, ?> defaultBoard(MiniGame game, BaseGamePlayer gamePlayer) {
+        throw new NoSuchMethodError();
+    }
+
+    public void addBoardViewer(MiniGame game, BaseGamePlayer gamePlayer) {
+        if (boardManager != null)
+            boardManager.onLogin(gamePlayer, defaultBoard(game, gamePlayer));
+    }
+
+    public void removeBoardViewer(UUID uuid) {
+        if (boardManager != null)
+            boardManager.onLogout(uuid);
+    }
+
+    public void disableBoard() {
+        if (boardManager != null)
+            boardManager.onDisable();
+    }
+
+}

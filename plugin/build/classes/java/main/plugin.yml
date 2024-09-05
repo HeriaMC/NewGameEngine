@@ -1,0 +1,11 @@
+# Auto-generated plugin.yml, generated at 2024/09/04 20:58:30 by org.bukkit.plugin.java.annotation.PluginAnnotationProcessor
+
+main: fr.heriamc.games.core.GameEngine
+name: HeriaGameEngine
+version: 1.0.0
+author: Joupi
+depend:
+- SlimeWorldManager
+- HeriaAPI
+commands: {}
+permissions: {}
