@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 public interface GameApi {
 
     EventBus getEventBus();
-    GuiManager getGuiManager();
 
     GamePoolManager getGamePoolManager();
 

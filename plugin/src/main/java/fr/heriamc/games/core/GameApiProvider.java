@@ -1,13 +1,10 @@
 package fr.heriamc.games.core;
 
 import fr.heriamc.api.HeriaAPI;
-import fr.heriamc.api.server.HeriaServer;
 import fr.heriamc.api.server.HeriaServerType;
 import fr.heriamc.games.api.GameApi;
-import fr.heriamc.games.api.GuiManager;
 import fr.heriamc.games.api.pool.GamePoolManager;
 import fr.heriamc.games.core.event.GameEventBus;
-import fr.heriamc.games.core.manager.GameGuiManager;
 import fr.heriamc.games.core.pool.GamePoolRepository;
 import fr.heriamc.games.engine.event.EventBus;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
@@ -23,8 +20,6 @@ import org.slf4j.Logger;
 public class GameApiProvider implements GameApi {
 
     private final EventBus eventBus;
-    private final GuiManager guiManager;
-
     private final GamePoolManager gamePoolManager;
 
     private boolean devMode;
@@ -33,7 +28,6 @@ public class GameApiProvider implements GameApi {
 
     public GameApiProvider(JavaPlugin plugin) {
         this.eventBus = new GameEventBus(plugin);
-        this.guiManager = new GameGuiManager(plugin);
         this.gamePoolManager = new GamePoolRepository();
         this.devMode = false;
         this.heriaAPI = HeriaAPI.get();
