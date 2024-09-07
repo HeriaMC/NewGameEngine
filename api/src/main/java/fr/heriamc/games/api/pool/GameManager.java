@@ -42,12 +42,15 @@ public interface GameManager<M extends MiniGame> {
     M getNullableGame(Player player);
 
     void getGame(Player player, Consumer<M> consumer);
-    void getGame(Player player, BiConsumer<M, BaseGamePlayer> biConsumer);
+    <G extends BaseGamePlayer> void getGame(Player player, Class<G> clazz, BiConsumer<M, G> biConsumer);
 
     Optional<M> getGameByID(String id);
 
     void getGameByID(String id, Consumer<M> consumer);
     void getGameByID(String id, Player player, Consumer<M> consumer);
+
+    Optional<M> getGameWithMorePlayers();
+    Optional<M> getReachableGameWithLessPlayers();
 
     List<M> getGames(GameState state);
 

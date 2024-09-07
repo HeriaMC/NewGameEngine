@@ -13,6 +13,7 @@ import fr.heriamc.games.core.listener.GamePacketListener;
 import fr.heriamc.games.core.test.ExampleGamePool;
 import fr.heriamc.games.engine.utils.CacheUtils;
 import fr.heriamc.games.engine.utils.GameSizeTemplate;
+import fr.heriamc.games.engine.utils.concurrent.BukkitThreading;
 import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
 import fr.heriamc.games.engine.utils.concurrent.VirtualThreading;
 import lombok.Getter;
@@ -35,15 +36,15 @@ public class GameEngine extends JavaPlugin {
 
     private GameApi gameApi;
 
-    private HeriaCommandManager commandManager;
     private ExampleGamePool gamePool;
 
     @Override
     public void onEnable() {
+        BukkitThreading.setPlugin(this);
         gameApi = GameApi.setProvider(new GameApiProvider(this));
         gameApi.sendAscii(log);
 
-        this.commandManager = new HeriaCommandManager(this);
+        var commandManager = new HeriaCommandManager(this);
 
         gameApi.setDevMode(false);
 
@@ -69,8 +70,9 @@ public class GameEngine extends JavaPlugin {
         gameApi.getGamePoolManager().shutdown();
 
         CacheUtils.cleanRemoveAll();
-        VirtualThreading.shutdown();
-        MultiThreading.shutdown();
+
+        /*VirtualThreading.shutdown();
+        MultiThreading.shutdown();*/
 
         log.info("GAME ENGINE BYE BYE.");
     }

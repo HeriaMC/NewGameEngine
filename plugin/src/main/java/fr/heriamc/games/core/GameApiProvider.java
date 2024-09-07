@@ -14,6 +14,7 @@ import fr.heriamc.games.engine.player.BaseGamePlayer;
 import fr.heriamc.proxy.packet.SendPlayerPacket;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 
@@ -39,10 +40,15 @@ public class GameApiProvider implements GameApi {
     }
 
     @Override
-    public void redirectToHub(BaseGamePlayer gamePlayer) {
-        final var hub = heriaAPI.getServerManager().getWithLessPlayers(HeriaServerType.HUB);
+    public void redirectToHub(Player player) {
+        var hub = heriaAPI.getServerManager().getWithLessPlayers(HeriaServerType.HUB);
 
-        heriaAPI.getMessaging().send(new SendPlayerPacket(gamePlayer.getUuid(), hub.getName()));
+        heriaAPI.getMessaging().send(new SendPlayerPacket(player.getUniqueId(), hub.getName()));
+    }
+
+    @Override
+    public void redirectToHub(BaseGamePlayer gamePlayer) {
+        redirectToHub(gamePlayer.getPlayer());
     }
 
     @Override

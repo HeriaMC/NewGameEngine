@@ -136,10 +136,10 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     }
 
     @Override
-    public void getGame(Player player, BiConsumer<M, BaseGamePlayer> biConsumer) {
+    public <G extends BaseGamePlayer> void getGame(Player player, Class<G> clazz, BiConsumer<M, G> biConsumer) {
         games.stream()
                 .filter(game -> game.containsPlayer(player))
-                .findFirst().ifPresent(game -> biConsumer.accept(game, game.getPlayers().get(player.getUniqueId())));
+                .findFirst().ifPresent(game -> biConsumer.accept(game, clazz.cast(game.getPlayers().get(player.getUniqueId()))));
     }
 
     @Override
@@ -164,9 +164,19 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     }
 
     @Override
+    public Optional<M> getGameWithMorePlayers() {
+        return Optional.ofNullable(getReachableGamesWithMorePlayers().getFirst());
+    }
+
+    @Override
+    public Optional<M> getReachableGameWithLessPlayers() {
+        return Optional.ofNullable(getReachableGamesWithLessPlayers().getFirst());
+    }
+
+    @Override
     public List<M> getGames(GameState state) {
         return games.stream()
-                .filter(game -> game.getState().equals(state))
+                .filter(game -> game.getState() == state)
                 .toList();
     }
 
@@ -185,8 +195,9 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     @Override
     public List<M> getReachableGames() {
         return games.stream()
-                .filter(game -> game.getState().equals(GameState.WAIT)
-                        || game.getState().equals(GameState.ALWAYS_PLAYING)
+                .filter(game -> game.getState() == GameState.WAIT
+                        || game.getState() == GameState.STARTING
+                        || game.getState() == GameState.ALWAYS_PLAYING
                         && game.canJoin())
                .toList();
     }
@@ -234,7 +245,7 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     @Override
     public List<M> getGamesWithLessPlayers(GameState state) {
         return getGamesWithLessPlayers().stream()
-                .filter(game -> game.getState().equals(state))
+                .filter(game -> game.getState() == state)
                 .toList();
     }
 

@@ -9,6 +9,16 @@ public class ExampleWaitingRoom extends GameWaitingRoom<ExampleGame, ExampleGame
     }
 
     @Override
+    public void onJoin(ExampleGamePlayer gamePlayer) {
+
+    }
+
+    @Override
+    public void onLeave(ExampleGamePlayer gamePlayer) {
+
+    }
+
+    @Override
     public void giveItems(ExampleGamePlayer gamePlayer) {
 
     }

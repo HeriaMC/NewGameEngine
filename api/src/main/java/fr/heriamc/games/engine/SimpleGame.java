@@ -71,7 +71,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
     @Override
     public void joinGame(Player player, boolean spectator) {
         players.computeIfAbsent(player.getUniqueId(), uuid -> {
-            G gamePlayer = defaultGamePlayer(uuid, spectator);
+            final var gamePlayer = defaultGamePlayer(uuid, spectator);
 
             playerCount.incrementAndGet();
             settings.addBoardViewer(this, gamePlayer);
@@ -147,7 +147,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
     }
 
     public void ifContainsPlayer(UUID uuid, Consumer<G> consumer) {
-        final G gamePlayer = players.get(uuid);
+        final var gamePlayer = players.get(uuid);
 
         if (gamePlayer != null)
             consumer.accept(gamePlayer);

@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @Setter
 public abstract class GameTeam<G extends GamePlayer<?>> {
 
-    private final String name;
-    private final GameTeamColor color;
+    protected final String name;
+    protected final GameTeamColor color;
 
-    private int maxSize;
+    protected int maxSize;
 
-    private final SizedList<G> members;
+    protected final SizedList<G> members;
 
     public GameTeam(int maxSize, GameTeamColor color) {
         this.name = color.getName();

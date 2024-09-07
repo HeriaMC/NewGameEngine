@@ -6,7 +6,6 @@ import fr.heriamc.games.engine.point.SinglePoint;
 import fr.heriamc.games.engine.region.GameRegion;
 import fr.heriamc.games.engine.utils.func.ThrowingRunnable;
 import fr.heriamc.games.engine.utils.json.adapter.LocationAdapter;
-import fr.heriamc.games.engine.utils.json.adapter.GameRegionAdapter;
 import fr.heriamc.games.engine.utils.json.adapter.SpawnPointAdapter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
@@ -27,7 +26,6 @@ public class Utils {
     public final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Location.class, new LocationAdapter())
             .registerTypeAdapter(SinglePoint.class, new SpawnPointAdapter())
-            .registerTypeAdapter(GameRegion.class, new GameRegionAdapter())
             .disableHtmlEscaping().setPrettyPrinting().create();
 
     public <T> void ifTrue(T object, Predicate<T> predicate, Consumer<T> consumer) {

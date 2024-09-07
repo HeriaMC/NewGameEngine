@@ -23,7 +23,6 @@ public abstract class CountdownTask implements Task<CountdownTask> {
     protected final int duration;
 
     protected final AtomicInteger secondsLeft;
-
     protected final AtomicBoolean started, cancelled, finished;
 
     public CountdownTask(int duration, boolean virtual) {
@@ -67,7 +66,7 @@ public abstract class CountdownTask implements Task<CountdownTask> {
             //log.info("[OnNext] Started: {} | Finished: {} | Cancelled: {} | SecondsLeft: {}", started.get(), finished.get(), cancelled.get(), secondsLeft.get());
             onNext(this);
             secondsLeft.decrementAndGet();
-        }, 0L, 1, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     @Override

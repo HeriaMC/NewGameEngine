@@ -4,6 +4,7 @@ import fr.heriamc.games.api.pool.GamePoolManager;
 import fr.heriamc.games.engine.event.EventBus;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 
 public interface GameApi {
@@ -15,6 +16,7 @@ public interface GameApi {
 
     boolean isDevMode();
 
+    void redirectToHub(Player player);
     void redirectToHub(BaseGamePlayer gamePlayer);
 
     void setDevMode(boolean devMode);

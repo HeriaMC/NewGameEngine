@@ -12,6 +12,7 @@ import fr.heriamc.games.engine.player.BaseGamePlayer;
 import fr.heriamc.proxy.packet.SendPlayerPacket;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,6 +71,16 @@ public abstract class GameAddon<P extends Pool> extends JavaPlugin implements Ad
     @Override
     public void openGui(HeriaMenu menu) {
         heriaBukkit.getMenuManager().open(menu);
+    }
+
+    @Override
+    public void redirectToHub(Player player) {
+        GameApi.getInstance().redirectToHub(player);
+    }
+
+    @Override
+    public void redirectToHub(BaseGamePlayer gamePlayer) {
+        GameApi.getInstance().redirectToHub(gamePlayer);
     }
 
     @Override

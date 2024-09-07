@@ -2,6 +2,8 @@ package fr.heriamc.games.engine.point;
 
 import fr.heriamc.games.engine.map.Map;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
+import fr.heriamc.games.engine.utils.CollectionUtils;
+import fr.heriamc.games.engine.utils.concurrent.BukkitThreading;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +11,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -53,6 +57,22 @@ public class SinglePoint implements SpawnPoint {
 
     public void teleport(BaseGamePlayer gamePlayer) {
         gamePlayer.teleport(location);
+    }
+
+    public <G extends BaseGamePlayer> void teleport(Collection<G> collection) {
+        collection.forEach(this::teleport);
+    }
+
+    public void syncTeleport(Player player) {
+        BukkitThreading.runTask(() -> player.teleport(location));
+    }
+
+    public void syncTeleport(BaseGamePlayer gamePlayer) {
+        BukkitThreading.runTask(() -> gamePlayer.teleport(location));
+    }
+
+    public <G extends BaseGamePlayer> void syncTeleport(Collection<G> collection) {
+        BukkitThreading.runTask(() -> collection.forEach(this::teleport));
     }
 
     @Override

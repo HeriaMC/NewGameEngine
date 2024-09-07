@@ -5,6 +5,8 @@ import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.menu.HeriaMenu;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.api.pool.Pool;
+import fr.heriamc.games.engine.player.BaseGamePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,9 @@ public interface Addon {
     void registerCommand(Object... objects);
 
     void openGui(HeriaMenu menu);
+
+    void redirectToHub(Player player);
+    void redirectToHub(BaseGamePlayer gamePlayer);
 
     void sendDebug();
 

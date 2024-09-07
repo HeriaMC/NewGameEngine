@@ -10,19 +10,15 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
-public abstract class GameChooseTeamGui<M extends Game<G, T, ?>, G extends GamePlayer<T>, T extends GameTeam<G>> extends NewGameGui<M, G, T> {
+public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T>, T extends GameTeam<G>> extends NewGameGui<M, G, T> {
 
     private static final int[] fill = new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25 };
-    private static final ItemBuilder random = new ItemBuilder(Material.SKULL_ITEM, 1, (short) 3).setName("§fAléatoire").setCustomHeadData(GameSkull.DICE.getData());
 
     private final ItemBuilder randomItem;
 
-    public GameChooseTeamGui(M game, G gamePlayer) {
-        super(game, gamePlayer, "Équipes", 36, true);
-        this.randomItem = random.onClick(event -> {
-            game.addPlayerToRandomTeam(gamePlayer);
-            updateMenu();
-        });
+    public GameTeamSelectorGui(M game, G gamePlayer, String name) {
+        super(game, gamePlayer, name, 36, true);
+        this.randomItem = getRandomTeamItem(game, gamePlayer);
     }
 
     @Override
@@ -52,7 +48,7 @@ public abstract class GameChooseTeamGui<M extends Game<G, T, ?>, G extends GameP
                     }
                 });
 
-        for (G member : team.getMembers())
+        for (var member : team.getMembers())
             builder.addLore("§7- " + member.getName());
 
         builder.addLore(" ");
@@ -61,6 +57,16 @@ public abstract class GameChooseTeamGui<M extends Game<G, T, ?>, G extends GameP
                 : "§8■ §eCliquez pour rejoindre");
 
         return builder;
+    }
+
+    public ItemBuilder getRandomTeamItem(M game, G gamePlayer) {
+        return new ItemBuilder(Material.SKULL_ITEM, 1, (short) 3)
+                .setName("§fAléatoire")
+                .setCustomHeadData(GameSkull.DICE.getData())
+                .onClick(event -> {
+                    game.addPlayerToRandomTeam(gamePlayer);
+                    updateMenu();
+                });
     }
 
 }
