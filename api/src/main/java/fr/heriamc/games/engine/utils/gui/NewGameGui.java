@@ -1,4 +1,4 @@
-package fr.heriamc.games.engine.utils.newgui;
+package fr.heriamc.games.engine.utils.gui;
 
 import fr.heriamc.bukkit.menu.HeriaMenu;
 import fr.heriamc.games.engine.Game;

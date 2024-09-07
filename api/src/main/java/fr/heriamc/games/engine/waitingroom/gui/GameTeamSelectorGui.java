@@ -5,7 +5,7 @@ import fr.heriamc.games.engine.Game;
 import fr.heriamc.games.engine.player.GamePlayer;
 import fr.heriamc.games.engine.team.GameTeam;
 import fr.heriamc.games.engine.utils.item.GameSkull;
-import fr.heriamc.games.engine.utils.newgui.NewGameGui;
+import fr.heriamc.games.engine.utils.gui.NewGameGui;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
