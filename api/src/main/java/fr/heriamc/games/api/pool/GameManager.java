@@ -50,6 +50,9 @@ public interface GameManager<M extends MiniGame> {
     void getGameByID(String id, Player player, Consumer<M> consumer);
 
     Optional<M> getGameWithMorePlayers();
+    Optional<M> getGameWithLessPlayers();
+
+    Optional<M> getReachableGameWithMorePlayers();
     Optional<M> getReachableGameWithLessPlayers();
 
     List<M> getGames(GameState state);

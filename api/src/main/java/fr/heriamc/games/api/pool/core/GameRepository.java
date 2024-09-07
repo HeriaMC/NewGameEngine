@@ -165,6 +165,16 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
 
     @Override
     public Optional<M> getGameWithMorePlayers() {
+        return Optional.ofNullable(getGamesWithMorePlayers().getFirst());
+    }
+
+    @Override
+    public Optional<M> getGameWithLessPlayers() {
+        return Optional.ofNullable(getGamesWithLessPlayers().getFirst());
+    }
+
+    @Override
+    public Optional<M> getReachableGameWithMorePlayers() {
         return Optional.ofNullable(getReachableGamesWithMorePlayers().getFirst());
     }
 
