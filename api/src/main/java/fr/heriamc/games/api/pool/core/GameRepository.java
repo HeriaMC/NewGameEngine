@@ -84,6 +84,7 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
         }
 
         gameProcessor.addGame(game);
+        //Bukkit.getPluginManager().callEvent(new GameLoadEvent<>(game));
         log.info("[GameManager] ADDED GAME {} ADDED TO PROCESSOR QUEUE", game.getFullName());
     }
 
@@ -100,19 +101,25 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
         }
 
         games.add(game);
+        //Bukkit.getPluginManager().callEvent(new GameAddedEvent<>(game));
         log.info("[GameManager] ADDED GAME: {}", game.getFullName());
     }
 
     @Override
     public void removeGame(M game) {
-        if (games.removeIf(game::equals))
+        if (games.removeIf(game::equals)) {
+            //Bukkit.getPluginManager().callEvent(new GameRemovedEvent<>(game));
             log.info("[GameManager] REMOVED GAME: {}", game.getFullName());
+
+            if (games.size() < gamePool.getMinPoolSize())
+                gamePool.loadDefaultGames();
+        }
     }
 
     @Override
     public void shutdown() {
-        games.forEach(MiniGame::endGame);
         gameProcessor.shutdown();
+        games.forEach(MiniGame::endGame);
     }
 
     @Override

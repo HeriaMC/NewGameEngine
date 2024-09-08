@@ -2,24 +2,20 @@ package fr.heriamc.games.engine.map.slime;
 
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
-import com.grinderwolf.swm.api.world.SlimeWorld;
 import com.grinderwolf.swm.api.world.properties.SlimeProperties;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
-import com.grinderwolf.swm.plugin.SWMPlugin;
 import fr.heriamc.games.engine.map.GameMapLoader;
+import fr.heriamc.games.engine.utils.concurrent.BukkitThreading;
 import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
 import fr.heriamc.games.engine.utils.func.ThrowingRunnable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -28,11 +24,11 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
 
-    private final SlimePlugin slimePlugin;
+    private static final SlimePlugin slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
+
     private final SlimeLoader slimeLoader;
 
     public SlimeWorldLoader(String slimeLoaderName) {
-        this.slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
         this.slimeLoader = slimePlugin.getLoader(slimeLoaderName);
     }
 
@@ -47,59 +43,56 @@ public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
     public CompletableFuture<SlimeMap> load(SlimeMap map) {
         CompletableFuture<SlimeMap> future = new CompletableFuture<>();
 
-        SWMPlugin instance = SWMPlugin.getInstance();
-        Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
-
+        BukkitThreading.runTaskAsynchronously(() -> {
             try {
-                final long start = System.currentTimeMillis();
-                final SlimeLoader loader = slimePlugin.getLoader("file");
+                var start = System.currentTimeMillis();
+                var properties = new SlimePropertyMap();
 
-                final SlimePropertyMap properties = new SlimePropertyMap();
                 properties.setString(SlimeProperties.DIFFICULTY, "normal");
                 properties.setBoolean(SlimeProperties.PVP, true);
 
-                final SlimeWorld slimeWorld = slimePlugin.loadWorld(loader, map.getTemplateName(), true, properties).clone(map.getName());
-                Bukkit.getScheduler().runTask(instance, () -> {
-                    try {
-                        slimePlugin.generateWorld(slimeWorld);
-                    } catch (IllegalArgumentException ex) {
-                        Bukkit.getLogger().warning("[Core - World] " + ChatColor.RED + "Failed to generate world " + map.getName() + ": " + ex.getMessage() + ".");
-                        return;
-                    }
+                var slimeWorld = slimePlugin.loadWorld(slimeLoader, map.getTemplateName(), true, properties).clone(map.getName());
 
-                    long ms = (System.currentTimeMillis() - start);
-                    Bukkit.getLogger().warning("[Core - World] " + ChatColor.GREEN + "World " + ChatColor.YELLOW + map.getName()
-                            + ChatColor.GREEN + " loaded and generated in " + ms + "ms!");
+                BukkitThreading.runTask(() -> {
+                    ThrowingRunnable.of(
+                            () -> slimePlugin.generateWorld(slimeWorld),
+                            exception -> log.error("[SlimeWorldLoader] Failed to generate world {}: {}", map.getName(), exception.getMessage()));
+
+                    log.info("[SlimeWorldLoader] World {} generated in {}ms", map.getName(), System.currentTimeMillis() - start);
+
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            final World world = Bukkit.getWorld(map.getName());
+                            var world = Bukkit.getWorld(map.getName());
+
                             if (world != null) {
+                                log.info("[SlimeWorldLoader] World {} fully loaded in {}ms", map.getName(), System.currentTimeMillis() - start);
                                 map.setWorld(world);
                                 future.complete(map);
                                 this.cancel();
                             }
                         }
-                    }.runTaskTimer(instance, 2, 2);
+                    }.runTaskTimer(BukkitThreading.plugin, 2, 2);
+
                 });
             } catch (Exception exception) {
-                exception.printStackTrace();
+                log.error("[SlimeWorldLoader] ERROR WHEN LOADING MAP", exception);
             }
         });
 
         return future;
     }
 
-
     @Override
     public void unload(SlimeMap map) {
-        World world = Bukkit.getWorld(map.getName());
+        var world = Bukkit.getWorld(map.getName());
+
+        if (world == null) return;
 
         world.getPlayers()
-                .forEach(player -> player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
+                .forEach(player -> BukkitThreading.runTask(() -> player.teleport(Bukkit.getWorlds().getFirst().getSpawnLocation())));
 
-        Optional.ofNullable(map.getWorld())
-                .ifPresent(slimeWorld -> Bukkit.unloadWorld(world, false));
+        Bukkit.unloadWorld(world, false);
     }
 
     @Override
@@ -111,9 +104,9 @@ public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
                 })
                 .whenCompleteAsync((slimeMap, throwable) -> {
                     if (throwable != null)
-                        log.error("ERROR WHEN DELETE FILE: {}", throwable.getMessage());
+                        log.error("[SlimeWorldLoader] ERROR WHEN DELETE FILE: {}", throwable.getMessage());
                     else
-                        log.info("DELETE COMPLETE FOR: {}", slimeMap.getName());
+                        log.info("[SlimeWorldLoader] DELETE COMPLETE FOR: {}", slimeMap.getName());
                 });
     }
 

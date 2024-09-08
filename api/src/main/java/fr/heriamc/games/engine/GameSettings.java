@@ -16,11 +16,10 @@ import java.util.UUID;
 @Accessors(chain = true)
 public abstract class GameSettings<M extends MapManager<?>> {
 
-    private final GameSize gameSize;
+    protected final GameSize gameSize;
 
-    private M gameMapManager;
-
-    private GameBoardManager boardManager;
+    protected M gameMapManager;
+    protected GameBoardManager boardManager;
 
     public GameSettings(GameSize gameSize) {
         this.gameSize = gameSize;
@@ -37,6 +36,11 @@ public abstract class GameSettings<M extends MapManager<?>> {
 
     public GameBoard<?, ?> defaultBoard(MiniGame game, BaseGamePlayer gamePlayer) {
         throw new NoSuchMethodError();
+    }
+
+    public void endMapManager() {
+        if (gameMapManager != null)
+            gameMapManager.end();
     }
 
     public void addBoardViewer(MiniGame game, BaseGamePlayer gamePlayer) {

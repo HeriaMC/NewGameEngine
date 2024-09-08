@@ -3,13 +3,15 @@ package fr.heriamc.games.core.command;
 import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.command.CommandArgs;
 import fr.heriamc.bukkit.command.HeriaCommand;
-import fr.heriamc.games.core.gui.NewThreadGui;
+import fr.heriamc.games.core.gui.ThreadGui;
 
-public class ThreadGuiCommand {
+public record ThreadGuiCommand() {
 
     @HeriaCommand(name = "threads", inGameOnly = true)
     public void onExecute(CommandArgs commandArgs) {
-        HeriaBukkit.get().getMenuManager().open(new NewThreadGui(commandArgs.getPlayer()));
+        HeriaBukkit.get()
+                .getMenuManager()
+                .open(new ThreadGui(commandArgs.getPlayer()));
     }
 
 }

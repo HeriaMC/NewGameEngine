@@ -5,12 +5,12 @@ import fr.heriamc.games.engine.Game;
 import fr.heriamc.games.engine.player.GamePlayer;
 import fr.heriamc.games.engine.team.GameTeam;
 import fr.heriamc.games.engine.utils.item.GameSkull;
-import fr.heriamc.games.engine.utils.gui.NewGameGui;
+import fr.heriamc.games.engine.utils.gui.GameGui;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
-public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T>, T extends GameTeam<G>> extends NewGameGui<M, G, T> {
+public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T>, T extends GameTeam<G>> extends GameGui<M, G, T> {
 
     private static final int[] fill = new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25 };
 

@@ -1,7 +1,6 @@
 package fr.heriamc.games.engine.map.slime;
 
 import fr.heriamc.games.engine.map.GameMapCleaner;
-import fr.heriamc.games.engine.map.GameMapManager;
 import fr.heriamc.games.engine.map.MapManager;
 import fr.heriamc.games.engine.utils.func.ThrowingRunnable;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +18,8 @@ public class SlimeGameMapCleaner extends GameMapCleaner<SlimeWorldLoader> {
 
     @Override
     public void cleanUp() {
-        while (!getQueue().isEmpty()) {
-            getQueue().poll()
+        while (!queue.isEmpty()) {
+            queue.poll()
                     .thenAcceptAsync(file -> ThrowingRunnable.of(() -> Files.deleteIfExists(file.toPath())).run())
                     .whenComplete((unused, throwable) -> {
                         if (throwable != null)
@@ -31,9 +30,9 @@ public class SlimeGameMapCleaner extends GameMapCleaner<SlimeWorldLoader> {
 
     @Override
     public void scan() {
-        Arrays.stream(Objects.requireNonNull(getMapDir().listFiles()))
+        Arrays.stream(Objects.requireNonNull(mapDir.listFiles()))
                 .filter(file -> !file.getName().contains("template")
-                        && !getMapManager().containsMap(file.getName().split("\\.")[0]))
+                        && !mapManager.containsMap(file.getName().split("\\.")[0]))
                 .forEach(this::addFile);
     }
 

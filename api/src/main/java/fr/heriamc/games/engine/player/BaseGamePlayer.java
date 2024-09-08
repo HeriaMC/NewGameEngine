@@ -2,7 +2,6 @@ package fr.heriamc.games.engine.player;
 
 import fr.heriamc.api.HeriaAPI;
 import fr.heriamc.api.user.HeriaPlayer;
-import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.games.engine.point.SinglePoint;
 import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
 import lombok.Getter;
@@ -21,14 +20,14 @@ import java.util.UUID;
 @Setter
 public abstract class BaseGamePlayer {
 
-    private final UUID uuid;
+    protected final UUID uuid;
 
-    private final Player player;
+    protected final Player player;
 
-    private final HeriaPlayer heriaPlayer;
-    private final CraftPlayer craftPlayer;
+    protected final HeriaPlayer heriaPlayer;
+    protected final CraftPlayer craftPlayer;
 
-    private boolean spectator;
+    protected boolean spectator;
 
     public BaseGamePlayer(UUID uuid, boolean spectator) {
         this.uuid = uuid;

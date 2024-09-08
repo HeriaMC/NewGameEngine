@@ -2,20 +2,11 @@ package fr.heriamc.games.core.command;
 
 import fr.heriamc.bukkit.command.CommandArgs;
 import fr.heriamc.bukkit.command.HeriaCommand;
-import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.core.GameEngine;
 import fr.heriamc.games.engine.utils.CacheUtils;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-
-@Slf4j
-@AllArgsConstructor
-public class DebugCommand {
-
-    private final GameEngine plugin;
+public record DebugCommand(GameEngine plugin) {
 
     /*
         DEBUG GAME
@@ -23,8 +14,8 @@ public class DebugCommand {
 
     @HeriaCommand(name = "showListeners")
     public void showListenersCommand(CommandArgs commandArgs) {
-        commandArgs.getSender().sendMessage("LISTENERS: " + GameApi.getInstance().getEventBus().getListeners());
-        commandArgs.getSender().sendMessage("REGISTERED LISTENERS: " + GameApi.getInstance().getEventBus().getRegisteredListeners());
+        commandArgs.getSender().sendMessage("LISTENERS: " + plugin.getGameApi().getEventBus().getListeners());
+        commandArgs.getSender().sendMessage("REGISTERED LISTENERS: " + plugin.getGameApi().getEventBus().getRegisteredListeners());
     }
 
     @HeriaCommand(name = "showThread")

@@ -3,15 +3,13 @@ package fr.heriamc.games.engine.player;
 import fr.heriamc.games.engine.team.GameTeam;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.UUID;
 
 @Getter
 @Setter
 public abstract class GamePlayer<T extends GameTeam<?>> extends SimpleGamePlayer {
 
-    private T team;
+    protected T team;
 
     public GamePlayer(UUID uuid, int kills, int deaths, T team, boolean spectator) {
         super(uuid, kills, deaths, spectator);

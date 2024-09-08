@@ -153,7 +153,6 @@ public abstract class Game<G extends GamePlayer<T>, T extends GameTeam<G>, S ext
         sender.sendMessage("Game: " + getFullName());
         sender.sendMessage("Size: type=" + gameSize.getName() + ", min=" + gameSize.getMinPlayer() + ", max=" + gameSize.getMaxPlayer() + ", tn=" + gameSize.getTeamNeeded() + ", tm=" + gameSize.getTeamMaxPlayer());
         sender.sendMessage("State: " + getState());
-        //Optional.ofNullable(getPhaseManager().getCurrentPhase()).ifPresent(phase -> player.sendMessage("Phase: " + phase.getClass().getSimpleName()));
 
         sender.sendMessage("Locations: ");
         //getSettings().getSpawnPoints().stream().map(SpawnPoint::getDebugMessage).forEach(sender::sendMessage);

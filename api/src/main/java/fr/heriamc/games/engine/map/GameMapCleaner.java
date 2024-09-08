@@ -11,20 +11,20 @@ import java.util.concurrent.*;
 @Slf4j
 public abstract class GameMapCleaner<L extends GameMapLoader<?>> {
 
-    private final L mapLoader;
+    protected final L mapLoader;
 
-    private final File mapDir;
+    protected final File mapDir;
 
-    private final MapManager<?> mapManager;
-    private final BlockingQueue<CompletionStage<File>> queue;
+    protected final MapManager<?> mapManager;
+    protected final BlockingQueue<CompletionStage<File>> queue;
 
-    private ScheduledFuture<?> scanFuture, cleanUpFuture;
+    protected ScheduledFuture<?> scanFuture, cleanUpFuture;
 
     public GameMapCleaner(File mapDir, MapManager<?> mapManager, L mapLoader) {
         this.mapDir = mapDir;
         this.mapManager = mapManager;
         this.mapLoader = mapLoader;
-        this.queue = new LinkedBlockingQueue<>(10);
+        this.queue = new LinkedBlockingQueue<>(5);
         this.schedule();
     }
 
@@ -38,10 +38,10 @@ public abstract class GameMapCleaner<L extends GameMapLoader<?>> {
 
     public void shutdown() {
         if (scanFuture != null && !scanFuture.isCancelled())
-            scanFuture.cancel(true);
+            scanFuture.cancel(false);
 
         if (cleanUpFuture != null && !cleanUpFuture.isCancelled())
-            cleanUpFuture.cancel(true);
+            cleanUpFuture.cancel(false);
 
         queue.forEach(stage -> stage.toCompletableFuture().join());
         queue.clear();

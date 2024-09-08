@@ -4,7 +4,6 @@ import fr.heriamc.bukkit.game.GameState;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.engine.event.player.GamePlayerJoinEvent;
 import fr.heriamc.games.engine.event.player.GamePlayerLeaveEvent;
-import fr.heriamc.games.engine.map.MapManager;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,8 +58,8 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
     @Override
     public void unload() {
         //getEventBus().unregisterAll();
-        settings.getMapManagerOptional().ifPresent(MapManager::end);
-        GameApi.getInstance().getGamePoolManager().getGamePool(this.getClass()).getGamesManager().removeGame(this);
+        settings.endMapManager();
+        GameApi.getInstance().getGamePoolManager().getGamePool(getClass()).getGamesManager().removeGame(this);
     }
 
     @Override

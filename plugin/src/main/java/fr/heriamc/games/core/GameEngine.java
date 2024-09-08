@@ -14,8 +14,6 @@ import fr.heriamc.games.core.test.ExampleGamePool;
 import fr.heriamc.games.engine.utils.CacheUtils;
 import fr.heriamc.games.engine.utils.GameSizeTemplate;
 import fr.heriamc.games.engine.utils.concurrent.BukkitThreading;
-import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
-import fr.heriamc.games.engine.utils.concurrent.VirtualThreading;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,18 +38,18 @@ public class GameEngine extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.gameApi = GameApi.setProvider(new GameApiProvider(this));
         BukkitThreading.setPlugin(this);
-        gameApi = GameApi.setProvider(new GameApiProvider(this));
+
         gameApi.sendAscii(log);
+        gameApi.setDevMode(false);
 
         var commandManager = new HeriaCommandManager(this);
 
-        gameApi.setDevMode(false);
-
         if (gameApi.isDevMode()) {
             this.gamePool = new ExampleGamePool();
-            commandManager.registerCommand(new DebugCommand(this));
 
+            commandManager.registerCommand(new DebugCommand(this));
             gameApi.getGamePoolManager().addPool(gamePool);
 
             gamePool.addGame(2);
@@ -59,16 +57,20 @@ public class GameEngine extends JavaPlugin {
         }
 
         commandManager.registerCommand(new ThreadGuiCommand());
-        commandManager.registerCommand(new GameCommand(this));
+        commandManager.registerCommand(new GameCommand(gameApi.getGamePoolManager()));
 
-        gameApi.getEventBus().registerListeners(new GameConnectionListener(this, gameApi.getGamePoolManager()), new GameCancelListener());
-        HeriaAPI.get().getMessaging().registerReceiver(HeriaPacketChannel.GAME, new GamePacketListener(this));
+        gameApi.getEventBus().registerListeners(
+                new GameConnectionListener(gameApi.getGamePoolManager()),
+                new GameCancelListener()
+        );
+
+        HeriaAPI.get().getMessaging()
+                .registerReceiver(HeriaPacketChannel.GAME, new GamePacketListener(gameApi.getGamePoolManager()));
     }
 
     @Override
     public void onDisable() {
         gameApi.getGamePoolManager().shutdown();
-
         CacheUtils.cleanRemoveAll();
 
         /*VirtualThreading.shutdown();

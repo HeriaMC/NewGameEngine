@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class NewThreadGui extends HeriaPaginationMenu<Thread> {
+public class ThreadGui extends HeriaPaginationMenu<Thread> {
 
     private final static List<Integer> slots = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8,
             9, 10, 11, 12, 13, 14, 15, 16, 17,
@@ -24,7 +24,7 @@ public class NewThreadGui extends HeriaPaginationMenu<Thread> {
 
     private final static int[] borders = new int[] { 45, 46, 47, 51, 52, 53 };
 
-    public NewThreadGui(Player player) {
+    public ThreadGui(Player player) {
         super(player, "§e§l» §6Threads", 54, true, slots, new ArrayList<>(Thread.getAllStackTraces().keySet()));
 
         setLeftSlot(48);

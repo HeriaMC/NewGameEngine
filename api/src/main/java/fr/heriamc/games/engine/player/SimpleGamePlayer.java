@@ -10,7 +10,7 @@ import java.util.UUID;
 @Setter
 public abstract class SimpleGamePlayer extends BaseGamePlayer {
 
-    private int kills, deaths;
+    protected int kills, deaths;
 
     public SimpleGamePlayer(UUID uuid, int kills, int deaths, boolean spectator) {
         super(uuid, spectator);
