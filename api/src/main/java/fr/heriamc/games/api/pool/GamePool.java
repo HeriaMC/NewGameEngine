@@ -72,6 +72,10 @@ public abstract class GamePool<M extends MiniGame> implements Pool {
         gamesManager.addGame(number, newGame(uuid, object));
     }
 
+    public void addNecessaryGame() {
+        gamesManager.addGame(minPoolSize - gamesManager.getSize(), newGame());
+    }
+
     public void shutdown() {
         gamesManager.shutdown();
         gamePoolHeartBeat.shutdown();

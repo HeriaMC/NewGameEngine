@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class GameCancelListener implements Listener {
+public record GameCancelListener() implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {

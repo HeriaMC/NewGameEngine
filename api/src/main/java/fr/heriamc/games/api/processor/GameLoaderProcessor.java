@@ -44,7 +44,7 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
 
                 if (game.getState() == GameState.WAIT || game.getState() == GameState.ALWAYS_PLAYING) {
                     log.info("[GameProcessor] GAME : {} completely loaded", game.getFullName());
-                    gameManager.forceAddGame(game);
+                    //gameManager.forceAddGame(game);
                     queue.poll();
                     log.info("[GameProcessor] QUEUE: ELEMENTS LEFT={}", queue.size());
                 }

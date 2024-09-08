@@ -10,15 +10,16 @@ import org.slf4j.Logger;
 public interface GameApi {
 
     EventBus getEventBus();
-
     GamePoolManager getGamePoolManager();
 
     boolean isDevMode();
+    boolean isShutdown();
 
     void redirectToHub(Player player);
     void redirectToHub(BaseGamePlayer gamePlayer);
 
     void setDevMode(boolean devMode);
+    void setShutdown(boolean shutdown);
 
     void sendDebug(Logger logger);
     void sendAscii(Logger logger);

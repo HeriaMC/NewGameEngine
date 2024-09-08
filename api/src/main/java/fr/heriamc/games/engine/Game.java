@@ -152,6 +152,7 @@ public abstract class Game<G extends GamePlayer<T>, T extends GameTeam<G>, S ext
         sender.sendMessage("§m-----------------------------");
         sender.sendMessage("Game: " + getFullName());
         sender.sendMessage("Size: type=" + gameSize.getName() + ", min=" + gameSize.getMinPlayer() + ", max=" + gameSize.getMaxPlayer() + ", tn=" + gameSize.getTeamNeeded() + ", tm=" + gameSize.getTeamMaxPlayer());
+        sender.sendMessage("Condition: cj=" + canJoin() + ", cs=" + canStart() + ", isf=" + isFull() + ", ota=" + oneTeamAlive());
         sender.sendMessage("State: " + getState());
 
         sender.sendMessage("Locations: ");

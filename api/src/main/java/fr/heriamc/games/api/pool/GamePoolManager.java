@@ -28,7 +28,11 @@ public interface GamePoolManager {
 
     Optional<Pool> getGamePool(String name);
 
+    Optional<MiniGame> getGame(Player player);
     Optional<MiniGame> getGameByID(String id);
+
+    MiniGame getNullableGame(Player player);
+    MiniGame getNullableGameByID(String id);
 
     <M extends MiniGame> Pool getGamePool(Class<M> clazz);
 

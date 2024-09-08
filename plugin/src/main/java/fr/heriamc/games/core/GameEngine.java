@@ -70,6 +70,7 @@ public class GameEngine extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        gameApi.setShutdown(true);
         gameApi.getGamePoolManager().shutdown();
         CacheUtils.cleanRemoveAll();
 

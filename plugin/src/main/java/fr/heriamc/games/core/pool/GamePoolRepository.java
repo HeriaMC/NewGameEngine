@@ -91,11 +91,31 @@ public class GamePoolRepository implements GamePoolManager {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    public Optional<MiniGame> getGame(Player player) {
+        for (Pool gamePool : gamePools)
+            return gamePool.getGamesManager().getGame(player);
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<MiniGame> getGameByID(String id) {
         for (Pool gamePool : gamePools)
             return gamePool.getGamesManager().getGameByID(id);
         return Optional.empty();
+    }
+
+    @Override
+    public MiniGame getNullableGame(Player player) {
+        for (Pool gamePool : gamePools)
+            return gamePool.getGamesManager().getGame(player).orElse(null);
+        return null;
+    }
+
+    @Override
+    public MiniGame getNullableGameByID(String id) {
+        for (Pool gamePool : gamePools)
+            return gamePool.getGamesManager().getGameByID(id).orElse(null);
+        return null;
     }
 
     @Override

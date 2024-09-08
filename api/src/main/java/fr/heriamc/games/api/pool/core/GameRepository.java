@@ -1,6 +1,9 @@
 package fr.heriamc.games.api.pool.core;
 
+import fr.heriamc.api.HeriaAPI;
+import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.game.GameState;
+import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.api.pool.GameManager;
 import fr.heriamc.games.api.pool.GamePool;
 import fr.heriamc.games.api.processor.GameLoaderProcessor;
@@ -11,6 +14,7 @@ import fr.heriamc.games.engine.utils.CollectionUtils;
 import fr.heriamc.games.engine.utils.Utils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -41,7 +45,7 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     public void findGame(Player player) {
         switch (gamePool.getStrategy()) {
             case FILL_GAME ->
-                    getReachableGamesWithMorePlayers().stream().findFirst().ifPresentOrElse(
+                    getReachableGameWithMorePlayers().ifPresentOrElse(
                             game -> joinGame(game, player),
                             () -> player.sendMessage("[GameManager] NO GAMES AVAILABLE PLEASE COME BACK LATER (FILLGAME STRATEGY)"));
             case RANDOM ->
@@ -84,14 +88,18 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
         }
 
         gameProcessor.addGame(game);
+        games.add(game);
         //Bukkit.getPluginManager().callEvent(new GameLoadEvent<>(game));
-        log.info("[GameManager] ADDED GAME {} ADDED TO PROCESSOR QUEUE", game.getFullName());
+        log.info("[GameManager] GAME {} ADDED TO PROCESSOR QUEUE", game.getFullName());
     }
 
     @Override
     public void addGame(int number, Supplier<M> supplier) {
         Utils.range(number, () -> addGame(supplier.get()));
     }
+
+    /*
+        USELESS ??
 
     @Override
     public void forceAddGame(M game) {
@@ -103,16 +111,17 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
         games.add(game);
         //Bukkit.getPluginManager().callEvent(new GameAddedEvent<>(game));
         log.info("[GameManager] ADDED GAME: {}", game.getFullName());
-    }
+    }*/
 
     @Override
     public void removeGame(M game) {
         if (games.removeIf(game::equals)) {
             //Bukkit.getPluginManager().callEvent(new GameRemovedEvent<>(game));
             log.info("[GameManager] REMOVED GAME: {}", game.getFullName());
+            log.info("[GameManager] AVAILABLE GAMES: {}", games.size());
 
-            if (games.size() < gamePool.getMinPoolSize())
-                gamePool.loadDefaultGames();
+            if (!GameApi.getInstance().isShutdown() && games.size() < gamePool.getMinPoolSize())
+                gamePool.addNecessaryGame();
         }
     }
 
@@ -172,22 +181,22 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
 
     @Override
     public Optional<M> getGameWithMorePlayers() {
-        return Optional.ofNullable(getGamesWithMorePlayers().getFirst());
+        return getGamesWithMorePlayers().stream().findFirst();
     }
 
     @Override
     public Optional<M> getGameWithLessPlayers() {
-        return Optional.ofNullable(getGamesWithLessPlayers().getFirst());
+        return getGamesWithLessPlayers().stream().findFirst();
     }
 
     @Override
     public Optional<M> getReachableGameWithMorePlayers() {
-        return Optional.ofNullable(getReachableGamesWithMorePlayers().getFirst());
+        return getReachableGamesWithMorePlayers().stream().findFirst();
     }
 
     @Override
     public Optional<M> getReachableGameWithLessPlayers() {
-        return Optional.ofNullable(getReachableGamesWithLessPlayers().getFirst());
+        return getReachableGamesWithLessPlayers().stream().findFirst();
     }
 
     @Override
@@ -212,10 +221,9 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     @Override
     public List<M> getReachableGames() {
         return games.stream()
-                .filter(game -> game.getState() == GameState.WAIT
-                        || game.getState() == GameState.STARTING
-                        || game.getState() == GameState.ALWAYS_PLAYING
-                        && game.canJoin())
+                .filter(game -> game.getState().is(GameState.WAIT, GameState.STARTING, GameState.ALWAYS_PLAYING)
+                        && game.canJoin()
+                        && !game.isFull())
                .toList();
     }
 

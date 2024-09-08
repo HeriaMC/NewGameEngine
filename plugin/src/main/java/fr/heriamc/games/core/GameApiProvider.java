@@ -23,6 +23,7 @@ public class GameApiProvider implements GameApi {
     private final GamePoolManager gamePoolManager;
 
     private boolean devMode;
+    private boolean shutdown;
 
     private HeriaAPI heriaAPI;
 
@@ -30,6 +31,7 @@ public class GameApiProvider implements GameApi {
         this.eventBus = new GameEventBus(plugin);
         this.gamePoolManager = new GamePoolRepository();
         this.devMode = false;
+        this.shutdown = false;
         this.heriaAPI = HeriaAPI.get();
     }
 

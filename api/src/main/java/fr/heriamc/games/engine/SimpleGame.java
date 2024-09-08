@@ -76,6 +76,11 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
             playerCount.incrementAndGet();
             settings.addBoardViewer(this, gamePlayer);
+
+            Bukkit.getOnlinePlayers().stream()
+                    .filter(Predicate.not(this::containsPlayer))
+                    .forEach(player::hidePlayer);
+
             Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
 
             log.info("[{}] {} joined game.", getFullName(), player.getName());
@@ -220,6 +225,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
         sender.sendMessage("§m-----------------------------");
         sender.sendMessage("Game: " + getFullName());
         sender.sendMessage("Size: type=" + gameSize.getName() + ", min=" + gameSize.getMinPlayer() + ", max=" + gameSize.getMaxPlayer() + ", tn=" + gameSize.getTeamNeeded() + ", tm=" + gameSize.getTeamMaxPlayer());
+        sender.sendMessage("Condition: cj=" + canJoin() + ", cs=" + canStart() + ", isf=" + isFull());
         sender.sendMessage("State: " + state);
 
         sender.sendMessage("Locations: ");
