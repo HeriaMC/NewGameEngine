@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,7 +34,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
     protected final GameSize gameSize;
 
     protected GameState state;
-    protected AtomicInteger playerCount;
+    protected int playerCount;
 
     public SimpleGame(String name, S settings) {
         this.name = name;
@@ -44,7 +43,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
         this.gameSize = settings.getGameSize();
         this.players = new ConcurrentHashMap<>(gameSize.calculateMapCapacity());
         this.state = GameState.LOADING;
-        this.playerCount = new AtomicInteger(0);
+        this.playerCount = 0;
         this.preload();
     }
 
@@ -74,12 +73,12 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
         players.computeIfAbsent(player.getUniqueId(), uuid -> {
             final var gamePlayer = defaultGamePlayer(uuid, spectator);
 
-            playerCount.incrementAndGet();
+            this.playerCount += 1;
             settings.addBoardViewer(this, gamePlayer);
 
-            Bukkit.getOnlinePlayers().stream()
+            /*Bukkit.getOnlinePlayers().stream()
                     .filter(Predicate.not(this::containsPlayer))
-                    .forEach(player::hidePlayer);
+                    .forEach(player::hidePlayer);*/
 
             Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
 
@@ -91,7 +90,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
     @Override
     public void leaveGame(UUID uuid) {
         ifContainsPlayer(uuid, gamePlayer -> {
-            playerCount.decrementAndGet();
+            this.playerCount -= 1;
             settings.removeBoardViewer(uuid);
 
             Bukkit.getPluginManager().callEvent(new GamePlayerLeaveEvent<>(this, gamePlayer));
@@ -192,17 +191,17 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
     @Override
     public boolean canStart() {
-        return /*getAlivePlayersCount()*/ playerCount.get() >= gameSize.getMinPlayer();
+        return /*getAlivePlayersCount()*/ playerCount >= gameSize.getMinPlayer();
     }
 
     @Override
     public boolean isFull() {
-        return /*getAlivePlayersCount()*/ playerCount.get() == gameSize.getMaxPlayer();
+        return /*getAlivePlayersCount()*/ playerCount == gameSize.getMaxPlayer();
     }
 
     @Override
     public boolean canJoin() {
-        return /*getAlivePlayersCount()*/ playerCount.get() < gameSize.getMaxPlayer();
+        return /*getAlivePlayersCount()*/ playerCount < gameSize.getMaxPlayer();
     }
 
     @Override
@@ -217,7 +216,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
     @Override
     public int getSize() {
-        return playerCount.get();
+        return playerCount;
     }
 
     @Override

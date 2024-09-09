@@ -19,22 +19,22 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
     private final ScheduledExecutorService executorService;
     private final BlockingQueue<CompletableFuture<M>> queue;
 
-    public GameLoaderProcessor(GameManager<M> gameManager) {
+    public GameLoaderProcessor(GameManager<M> gameManager, int poolSize) {
         this.gameManager = gameManager;
         this.executorService = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("game-queue-processor-%d").build());
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new LinkedBlockingQueue<>(poolSize);
         this.executorService.scheduleAtFixedRate(this::process, 20, 20, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void process() {
-        CompletableFuture<M> future = queue.peek();
-        
+        var future = queue.peek();
+
         if (future != null && future.isDone()) {
             try {
                 if (queue.isEmpty()) return;
 
-                M game = queue.peek().get();
+                var game = queue.peek().get();
 
                 if (game.getState() == GameState.LOADING) {
                     log.info("[GameProcessor] START LOADING {}", game.getFullName());
@@ -44,7 +44,6 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
 
                 if (game.getState() == GameState.WAIT || game.getState() == GameState.ALWAYS_PLAYING) {
                     log.info("[GameProcessor] GAME : {} completely loaded", game.getFullName());
-                    //gameManager.forceAddGame(game);
                     queue.poll();
                     log.info("[GameProcessor] QUEUE: ELEMENTS LEFT={}", queue.size());
                 }

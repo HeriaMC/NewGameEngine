@@ -31,8 +31,6 @@ public interface GameManager<M extends MiniGame> {
     void addGame(M game);
     void addGame(int number, Supplier<M> supplier);
 
-    //void forceAddGame(M game);
-
     void removeGame(M game);
 
     void shutdown();

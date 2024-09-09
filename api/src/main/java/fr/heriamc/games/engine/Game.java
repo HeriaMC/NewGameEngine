@@ -32,7 +32,7 @@ public abstract class Game<G extends GamePlayer<T>, T extends GameTeam<G>, S ext
     @Override
     public void leaveGame(UUID uuid) {
         ifContainsPlayer(uuid, gamePlayer -> {
-            playerCount.decrementAndGet();
+            this.playerCount -= 1;
             settings.removeBoardViewer(uuid);
             removePlayerFromTeam(gamePlayer);
 

@@ -1,7 +1,5 @@
 package fr.heriamc.games.api.pool.core;
 
-import fr.heriamc.api.HeriaAPI;
-import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.game.GameState;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.api.pool.GameManager;
@@ -9,6 +7,8 @@ import fr.heriamc.games.api.pool.GamePool;
 import fr.heriamc.games.api.processor.GameLoaderProcessor;
 import fr.heriamc.games.api.processor.GameProcessor;
 import fr.heriamc.games.engine.MiniGame;
+import fr.heriamc.games.engine.event.game.GameAddedEvent;
+import fr.heriamc.games.engine.event.game.GameRemovedEvent;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import fr.heriamc.games.engine.utils.CollectionUtils;
 import fr.heriamc.games.engine.utils.Utils;
@@ -37,7 +37,7 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
 
     public GameRepository(GamePool<M> gamePool) {
         this.gamePool = gamePool;
-        this.gameProcessor = new GameLoaderProcessor<>(this);
+        this.gameProcessor = new GameLoaderProcessor<>(this, gamePool.getMaxPoolSize());
         this.games = new ArrayList<>(gamePool.getMaxPoolSize());
     }
 
@@ -89,7 +89,7 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
 
         gameProcessor.addGame(game);
         games.add(game);
-        //Bukkit.getPluginManager().callEvent(new GameLoadEvent<>(game));
+        Bukkit.getPluginManager().callEvent(new GameAddedEvent<>(game, gamePool));
         log.info("[GameManager] GAME {} ADDED TO PROCESSOR QUEUE", game.getFullName());
     }
 
@@ -98,25 +98,10 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
         Utils.range(number, () -> addGame(supplier.get()));
     }
 
-    /*
-        USELESS ??
-
-    @Override
-    public void forceAddGame(M game) {
-        if (gamePool.getMaxPoolSize() == games.size()) {
-            log.warn("[GameManager] GAME POOL MAX SIZE ALREADY REACHED !");
-            return;
-        }
-
-        games.add(game);
-        //Bukkit.getPluginManager().callEvent(new GameAddedEvent<>(game));
-        log.info("[GameManager] ADDED GAME: {}", game.getFullName());
-    }*/
-
     @Override
     public void removeGame(M game) {
         if (games.removeIf(game::equals)) {
-            //Bukkit.getPluginManager().callEvent(new GameRemovedEvent<>(game));
+            Bukkit.getPluginManager().callEvent(new GameRemovedEvent<>(game, gamePool));
             log.info("[GameManager] REMOVED GAME: {}", game.getFullName());
             log.info("[GameManager] AVAILABLE GAMES: {}", games.size());
 
