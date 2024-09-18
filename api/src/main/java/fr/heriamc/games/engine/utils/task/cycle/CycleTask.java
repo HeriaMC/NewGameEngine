@@ -64,6 +64,7 @@ public abstract class CycleTask implements Task<CycleTask> {
                 }
 
                 onNext(this);
+                secondsLeft.set(duration);
                 return;
             }
 
@@ -73,7 +74,7 @@ public abstract class CycleTask implements Task<CycleTask> {
 
     @Override
     public void reset() {
-        setSecondsLeft(duration);
+        secondsLeft.set(duration);
         started.set(false);
     }
 
