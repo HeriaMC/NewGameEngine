@@ -1,4 +1,4 @@
-# Auto-generated plugin.yml, generated at 2024/09/08 14:37:45 by org.bukkit.plugin.java.annotation.PluginAnnotationProcessor
+# Auto-generated plugin.yml, generated at 2024/09/18 21:03:53 by org.bukkit.plugin.java.annotation.PluginAnnotationProcessor
 
 main: fr.heriamc.games.core.GameEngine
 name: HeriaGameEngine

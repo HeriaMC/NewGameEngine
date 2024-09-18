@@ -4,25 +4,35 @@ import fr.heriamc.api.server.HeriaServerType;
 import fr.heriamc.games.api.DirectConnectStrategy;
 import fr.heriamc.games.api.pool.GamePool;
 import fr.heriamc.games.engine.GameSize;
-import fr.heriamc.games.engine.MiniGame;
 import fr.heriamc.games.engine.utils.GameSizeTemplate;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class ExampleGamePool extends GamePool<ExampleGame> {
 
+    /*
+        Class permetant de créer les games sur demande
+        le 1 correspond au minimum de game qui doit être lancer sur le serveur
+        le 5 correspond au maxium de game qui peux être lancer sur le serveur
+        la strategy correspond a ce qui se passe quand un joueur rejoint le serveur
+     */
     public ExampleGamePool() {
-        super(ExampleGame.class,"Rush Pool", HeriaServerType.ONESHOT,1, 5, DirectConnectStrategy.RANDOM);
+        super(ExampleGame.class,"HikaBrain Pool", HeriaServerType.HIKABRAIN,1, 5, DirectConnectStrategy.FILL_GAME);
     }
 
+    /*
+        Nouvelle game sans argument
+     */
     @Override
     public Supplier<ExampleGame> newGame() {
         return () -> new ExampleGame(GameSizeTemplate.SIZE_1V1.toGameSize());
     }
 
+    /*
+        Pour plussieurs arguments
+     */
     @Override
     public Supplier<ExampleGame> newGame(Object... objects) {
         return () -> new ExampleGame(getArg(objects, GameSize.class));
@@ -35,9 +45,7 @@ public class ExampleGamePool extends GamePool<ExampleGame> {
 
     @Override
     public void useCustomStrategy(Player player) {
-        Optional.ofNullable(gamesManager.getEmptyGames().getFirst())
-                .filter(MiniGame::canJoin)
-                .ifPresent(game -> game.joinGame(player));
+
     }
 
 }

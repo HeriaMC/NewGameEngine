@@ -1,21 +1,19 @@
 package fr.heriamc.games.core.test;
 
-import fr.heriamc.bukkit.game.GameState;
 import fr.heriamc.games.engine.GameSize;
 import fr.heriamc.games.engine.SimpleGame;
-import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
+import fr.heriamc.games.engine.utils.GameSizeTemplate;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class ExampleGame extends SimpleGame<ExampleGamePlayer, ExampleGameSettings> {
 
     public ExampleGame(GameSize gameSize) {
-        super("rush", new ExampleGameSettings(gameSize));
+        super("ffa", new ExampleGameSettings(GameSizeTemplate.FFA.toGameSize()));
     }
 
     public ExampleGame(UUID uuid, GameSize gameSize) {
-        this(gameSize);
+        this(GameSizeTemplate.FFA.toGameSize());
     }
 
     @Override
@@ -25,7 +23,7 @@ public class ExampleGame extends SimpleGame<ExampleGamePlayer, ExampleGameSettin
 
     @Override
     public void load() {
-        MultiThreading.schedule(() -> setState(GameState.WAIT), 6, TimeUnit.SECONDS);
+        settings.getGameMapManager().setup();
     }
 
 }

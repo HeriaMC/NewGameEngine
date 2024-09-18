@@ -1,12 +1,10 @@
-package fr.heriamc.games.engine.utils.task;
+package fr.heriamc.games.engine.utils.task.cycle;
 
 import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
 import fr.heriamc.games.engine.utils.concurrent.VirtualThreading;
+import fr.heriamc.games.engine.utils.task.Task;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -14,8 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-@Setter
-public abstract class CountdownTask implements Task<CountdownTask> {
+public abstract class CycleTask implements Task<CycleTask> {
 
     private final ScheduledExecutorService executor;
     private ScheduledFuture<?> future;
@@ -25,7 +22,7 @@ public abstract class CountdownTask implements Task<CountdownTask> {
     protected final AtomicInteger secondsLeft;
     protected final AtomicBoolean started, cancelled, finished;
 
-    public CountdownTask(int duration, boolean virtual) {
+    public CycleTask(int duration, boolean virtual) {
         this.executor = virtual ? VirtualThreading.scheduledPool : MultiThreading.scheduledPool;
         this.duration = duration;
         this.secondsLeft = new AtomicInteger(duration);
@@ -34,7 +31,7 @@ public abstract class CountdownTask implements Task<CountdownTask> {
         this.finished = new AtomicBoolean(true);
     }
 
-    public CountdownTask(int duration) {
+    public CycleTask(int duration) {
         this(duration, true);
     }
 
@@ -49,22 +46,27 @@ public abstract class CountdownTask implements Task<CountdownTask> {
         secondsLeft.set(duration);
         onStart();
 
-        //log.info("[OnStart] Started: {} | Finished: {} | Cancelled: {} | SecondsLeft: {}", started.get(), finished.get(), cancelled.get(), secondsLeft.get());
         future = executor.scheduleAtFixedRate(() -> {
             if (secondsLeft.get() <= 0 || cancelled.get()) {
 
-                if (!cancelled.get()) onComplete();
-                else onCancel();
+                if (!cancelled.get()) {
+                    onComplete();
+                    finished.set(true);
+                    started.set(false);
+                    future.cancel(false);
+                    return;
+                } else if (cancelled.get()) {
+                    onCancel();
+                    finished.set(true);
+                    started.set(false);
+                    future.cancel(false);
+                    return;
+                }
 
-                finished.set(true);
-                started.set(false);
-                //log.info("[OnComplete] Started: {} | Finished: {} | Cancelled: {} | SecondsLeft: {}", started.get(), finished.get(), cancelled.get(), secondsLeft.get());
-                future.cancel(false);
+                onNext(this);
                 return;
             }
 
-            //log.info("[OnNext] Started: {} | Finished: {} | Cancelled: {} | SecondsLeft: {}", started.get(), finished.get(), cancelled.get(), secondsLeft.get());
-            onNext(this);
             secondsLeft.decrementAndGet();
         }, 0, 1, TimeUnit.SECONDS);
     }

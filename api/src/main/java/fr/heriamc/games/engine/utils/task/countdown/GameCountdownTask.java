@@ -1,4 +1,4 @@
-package fr.heriamc.games.engine.utils.task;
+package fr.heriamc.games.engine.utils.task.countdown;
 
 import fr.heriamc.games.engine.MiniGame;
 import lombok.Getter;

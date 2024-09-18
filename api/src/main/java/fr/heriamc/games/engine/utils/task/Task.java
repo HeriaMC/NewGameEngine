@@ -27,11 +27,6 @@ public interface Task<T> extends Runnable {
     void onComplete();
     void onCancel();
 
-    /*Task<T> setNextConsumer(Consumer<T> consumer);
-    Task<T> setStartRunnable(Runnable runnable);
-    Task<T> setCompleteRunnable(Runnable runnable);
-    Task<T> setCancelRunnable(Runnable runnable);*/
-
     void cancel();
     void reset();
 

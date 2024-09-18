@@ -1,10 +1,9 @@
-package fr.heriamc.games.engine.utils.task;
+package fr.heriamc.games.engine.utils.task.countdown;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 @Getter

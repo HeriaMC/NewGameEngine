@@ -3,7 +3,7 @@ package fr.heriamc.games.engine.waitingroom;
 import fr.heriamc.games.engine.MiniGame;
 import fr.heriamc.games.engine.map.Map;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
-import fr.heriamc.games.engine.utils.task.CountdownTask;
+import fr.heriamc.games.engine.utils.task.countdown.CountdownTask;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -27,10 +27,11 @@ public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlay
     public void processJoin(G gamePlayer) {
         cleanUpPlayer(gamePlayer);
 
-        map.getSpawn().syncTeleport(gamePlayer);
+        if (map != null)
+            map.getSpawn().syncTeleport(gamePlayer);
+
         onJoin(gamePlayer);
         giveItems(gamePlayer);
-
         tryToStartTimer();
     }
 
@@ -53,13 +54,17 @@ public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlay
         player.setExp(0f);
     }
 
+    public void teleport(G gamePlayer) {
+        map.getSpawn().syncTeleport(gamePlayer);
+    }
+
     public void tryToStartTimer() {
-        if (game.canStart())
+        if (countdownTask != null && game.canStart())
             countdownTask.run();
     }
 
     public void tryToCancelTimer() {
-        if (!game.canStart() && countdownTask.isStarted())
+        if (countdownTask != null && !game.canStart() && countdownTask.isStarted())
             countdownTask.cancel();
     }
 
