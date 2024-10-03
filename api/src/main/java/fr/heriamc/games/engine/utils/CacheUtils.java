@@ -3,7 +3,6 @@ package fr.heriamc.games.engine.utils;
 import fr.heriamc.games.engine.MiniGame;
 import fr.heriamc.games.engine.utils.cache.Cooldown;
 import fr.heriamc.games.engine.utils.cache.DynamicCache;
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

@@ -12,8 +12,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public abstract class GamePlayerKit<G extends BaseGamePlayer> extends GameKit {
 
-    private final G gamePlayer;
-    private final Player player;
+    protected final G gamePlayer;
+    protected final Player player;
 
     public GamePlayerKit(G gamePlayer) {
         this.gamePlayer = gamePlayer;

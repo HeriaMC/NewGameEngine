@@ -53,7 +53,7 @@ public class GameEventBus implements EventBus {
 
     @Override
     public void registerListener(Listener listener) {
-        if (getListeners().add(listener)) {
+        if (listeners.add(listener)) {
             Bukkit.getPluginManager().registerEvents(listener, plugin);
             log.info("Register new listener value: {}", listener.getClass().getSimpleName());
         }
@@ -67,7 +67,7 @@ public class GameEventBus implements EventBus {
 
     @Override
     public void registerListener(Class<?> clazz, Listener listener) {
-        if (getRegisteredListeners().computeIfAbsent(clazz, k -> new HashSet<>()).add(listener)) {
+        if (registeredListeners.computeIfAbsent(clazz, k -> new HashSet<>()).add(listener)) {
             Bukkit.getPluginManager().registerEvents(listener, plugin);
             log.info("Register new listener key: {} | value: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
         }
@@ -81,7 +81,7 @@ public class GameEventBus implements EventBus {
 
     @Override
     public void unregisterListener(Class<?> clazz, Listener listener) {
-        if (getRegisteredListeners().get(clazz).remove(listener))
+        if (registeredListeners.get(clazz).remove(listener))
             HandlerList.unregisterAll(listener);
     }
 
@@ -93,13 +93,13 @@ public class GameEventBus implements EventBus {
 
     @Override
     public void unregisterAllListeners() {
-        getRegisteredListeners().keySet().forEach(this::unregisterAllListeners);
-        getRegisteredListeners().clear();
+        registeredListeners.keySet().forEach(this::unregisterAllListeners);
+        registeredListeners.clear();
     }
 
     @Override
     public void unregisterAllListeners(Class<?> clazz) {
-        getRegisteredListeners().entrySet().stream()
+        registeredListeners.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(clazz))
                 .map(Map.Entry::getValue)
                 .flatMap(Collection::stream)

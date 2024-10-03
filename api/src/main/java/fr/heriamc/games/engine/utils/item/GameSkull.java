@@ -11,5 +11,4 @@ public enum GameSkull {
 
     private final String data;
 
-
 }

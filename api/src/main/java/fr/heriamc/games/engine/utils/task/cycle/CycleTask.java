@@ -49,14 +49,11 @@ public abstract class CycleTask implements Task<CycleTask> {
         future = executor.scheduleAtFixedRate(() -> {
             if (secondsLeft.get() <= 0 || cancelled.get()) {
 
-                if (!cancelled.get()) {
-                    onComplete();
-                    finished.set(true);
-                    started.set(false);
-                    future.cancel(false);
-                    return;
-                } else if (cancelled.get()) {
-                    onCancel();
+                if (finished.get()) {
+
+                    if (cancelled.get()) onCancel();
+                    else onComplete();
+
                     finished.set(true);
                     started.set(false);
                     future.cancel(false);
@@ -73,9 +70,14 @@ public abstract class CycleTask implements Task<CycleTask> {
     }
 
     @Override
-    public void reset() {
-        secondsLeft.set(duration);
+    public void end() {
+        if (future != null)
+            future.cancel(false);
+
         started.set(false);
+        cancelled.set(false);
+        finished.set(true);
+        onComplete();
     }
 
     @Override
@@ -87,6 +89,12 @@ public abstract class CycleTask implements Task<CycleTask> {
         cancelled.set(true);
         finished.set(true);
         onCancel();
+    }
+
+    @Override
+    public void reset() {
+        secondsLeft.set(duration);
+        started.set(false);
     }
 
     @Override

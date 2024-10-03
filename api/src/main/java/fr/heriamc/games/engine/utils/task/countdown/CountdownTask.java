@@ -66,9 +66,14 @@ public abstract class CountdownTask implements Task<CountdownTask> {
     }
 
     @Override
-    public void reset() {
-        setSecondsLeft(duration);
+    public void end() {
+        if (future != null)
+            future.cancel(false);
+
         started.set(false);
+        cancelled.set(false);
+        finished.set(true);
+        onComplete();
     }
 
     @Override
@@ -80,6 +85,12 @@ public abstract class CountdownTask implements Task<CountdownTask> {
         cancelled.set(true);
         finished.set(true);
         onCancel();
+    }
+
+    @Override
+    public void reset() {
+        setSecondsLeft(duration);
+        started.set(false);
     }
 
     @Override

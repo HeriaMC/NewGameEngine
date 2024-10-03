@@ -1,6 +1,7 @@
 package fr.heriamc.games.engine.map.slime;
 
 import com.grinderwolf.swm.api.SlimePlugin;
+import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.properties.SlimeProperties;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
@@ -15,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -54,11 +56,13 @@ public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
                 var slimeWorld = slimePlugin.loadWorld(slimeLoader, map.getTemplateName(), true, properties).clone(map.getName());
 
                 BukkitThreading.runTask(() -> {
-                    ThrowingRunnable.of(
-                            () -> slimePlugin.generateWorld(slimeWorld),
-                            exception -> log.error("[SlimeWorldLoader] Failed to generate world {}: {}", map.getName(), exception.getMessage()));
+                    try {
+                        slimePlugin.generateWorld(slimeWorld);
+                    } catch (Exception exception) {
+                        log.error("[SlimeWorldLoader] Failed to generate world {}: {}", map.getName(), exception.getMessage());
+                    }
 
-                    log.info("[SlimeWorldLoader] World {} generated in {}ms", map.getName(), System.currentTimeMillis() - start);
+                    //log.info("[SlimeWorldLoader] World {} generated in {}ms", map.getName(), System.currentTimeMillis() - start);
 
                     new BukkitRunnable() {
                         @Override
@@ -76,7 +80,7 @@ public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
 
                 });
             } catch (Exception exception) {
-                log.error("[SlimeWorldLoader] ERROR WHEN LOADING MAP", exception);
+                log.error("[SlimeWorldLoader] Failed to generate world {}: {}", map.getName(), exception.getMessage());
             }
         });
 
@@ -86,11 +90,12 @@ public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
     @Override
     public void unload(SlimeMap map) {
         var world = Bukkit.getWorld(map.getName());
+        var firstWorld = Bukkit.getWorlds().get(0);
 
         if (world == null) return;
 
-        world.getPlayers()
-                .forEach(player -> BukkitThreading.runTask(() -> player.teleport(Bukkit.getWorlds().getFirst().getSpawnLocation())));
+        if (firstWorld != null)
+            BukkitThreading.runTask(() -> world.getPlayers().forEach(player -> player.teleport(firstWorld.getSpawnLocation())));
 
         Bukkit.unloadWorld(world, false);
     }
@@ -99,8 +104,12 @@ public class SlimeWorldLoader implements GameMapLoader<SlimeMap> {
     public CompletableFuture<SlimeMap> delete(SlimeMap map) {
         return CompletableFuture
                 .supplyAsync(() -> {
-                    ThrowingRunnable.of(() -> slimeLoader.deleteWorld(map.getName())).run();
-                    return map;
+                    try {
+                        slimeLoader.deleteWorld(map.getName());
+                        return map;
+                    } catch (UnknownWorldException | IOException exception) {
+                        throw new RuntimeException(exception);
+                    }
                 })
                 .whenCompleteAsync((slimeMap, throwable) -> {
                     if (throwable != null)

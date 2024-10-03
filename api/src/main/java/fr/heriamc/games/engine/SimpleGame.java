@@ -51,7 +51,6 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
     @Override
     public void preload() {
-        settings.getGameMapManager().setup();
     }
 
     @Override

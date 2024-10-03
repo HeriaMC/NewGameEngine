@@ -27,6 +27,7 @@ public interface Task<T> extends Runnable {
     void onComplete();
     void onCancel();
 
+    void end();
     void cancel();
     void reset();
 

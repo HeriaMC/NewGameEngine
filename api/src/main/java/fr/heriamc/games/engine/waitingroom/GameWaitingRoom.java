@@ -25,10 +25,13 @@ public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlay
     protected abstract void giveItems(G gamePlayer);
 
     public void processJoin(G gamePlayer) {
+        var spawn = map.getSpawn();
         cleanUpPlayer(gamePlayer);
 
-        if (map != null)
-            map.getSpawn().syncTeleport(gamePlayer);
+        if (map != null && spawn != null) {
+            System.out.println("map not null " + map.getName());
+            spawn.syncTeleport(gamePlayer);
+        }
 
         onJoin(gamePlayer);
         giveItems(gamePlayer);
@@ -55,7 +58,10 @@ public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlay
     }
 
     public void teleport(G gamePlayer) {
-        map.getSpawn().syncTeleport(gamePlayer);
+        var spawn = map.getSpawn();
+
+        if (spawn != null)
+            spawn.syncTeleport(gamePlayer);
     }
 
     public void tryToStartTimer() {

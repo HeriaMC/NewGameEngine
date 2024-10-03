@@ -105,7 +105,8 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
             log.info("[GameManager] REMOVED GAME: {}", game.getFullName());
             log.info("[GameManager] AVAILABLE GAMES: {}", games.size());
 
-            if (!GameApi.getInstance().isShutdown() && games.size() < gamePool.getMinPoolSize())
+            if (!GameApi.getInstance().isShutdown()
+                    && games.size() < gamePool.getMinPoolSize())
                 gamePool.addNecessaryGame();
         }
     }

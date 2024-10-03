@@ -4,7 +4,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import fr.heriamc.bukkit.scoreboard.PersonalScoreboard;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import lombok.Getter;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,17 +13,16 @@ import java.util.concurrent.*;
 @Getter
 public class GameBoardManager {
 
-    private final Map<UUID, PersonalScoreboard> scoreboards;
-
     private final static ScheduledExecutorService executorMonoThread = Executors.newScheduledThreadPool(1, new ThreadFactoryBuilder().setNameFormat("board-mono-thread-%d").build());
     private final static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(5, new ThreadFactoryBuilder().setNameFormat("board-thread-%d").build());
 
-    private static final String serverIp = "play.heriamc.fr";
+    private final static String serverIp = "play.heriamc.fr";
+
+    private final Map<UUID, PersonalScoreboard> scoreboards;
 
     private final ScheduledFuture<?> glowingTask, reloadingTask;
 
-    private int ipCharIndex;
-    private int cooldown;
+    private int ipCharIndex, cooldown;
 
     public GameBoardManager() {
         this.scoreboards = new HashMap<>();

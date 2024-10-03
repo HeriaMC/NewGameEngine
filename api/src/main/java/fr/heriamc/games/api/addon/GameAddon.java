@@ -1,15 +1,12 @@
 package fr.heriamc.games.api.addon;
 
 import fr.heriamc.api.HeriaAPI;
-import fr.heriamc.api.server.HeriaServer;
-import fr.heriamc.api.server.HeriaServerType;
 import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.command.HeriaCommandManager;
 import fr.heriamc.bukkit.menu.HeriaMenu;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.api.pool.Pool;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
-import fr.heriamc.proxy.packet.SendPlayerPacket;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
