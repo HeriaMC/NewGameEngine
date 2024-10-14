@@ -2,6 +2,7 @@ package fr.heriamc.games.core;
 
 import fr.heriamc.api.HeriaAPI;
 import fr.heriamc.api.messaging.packet.HeriaPacketChannel;
+import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.command.HeriaCommandManager;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.core.command.DebugCommand;
@@ -44,6 +45,7 @@ public class GameEngine extends JavaPlugin {
         gameApi.sendAscii(log);
         gameApi.setDevMode(false);
 
+        var heriaApi = HeriaAPI.get();
         var commandManager = new HeriaCommandManager(this);
 
         if (gameApi.isDevMode()) {
@@ -64,8 +66,8 @@ public class GameEngine extends JavaPlugin {
                 new GameCancelListener()
         );
 
-        HeriaAPI.get().getMessaging()
-                .registerReceiver(HeriaPacketChannel.GAME, new GamePacketListener(gameApi.getGamePoolManager()));
+        heriaApi.getMessaging()
+                .registerReceiver(HeriaPacketChannel.GAME, new GamePacketListener(gameApi.getGamePoolManager(), heriaApi));
     }
 
     @Override

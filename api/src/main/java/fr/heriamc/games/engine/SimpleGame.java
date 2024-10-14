@@ -1,6 +1,7 @@
 package fr.heriamc.games.engine;
 
 import fr.heriamc.bukkit.game.GameState;
+import fr.heriamc.bukkit.game.size.GameSize;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.engine.event.player.GamePlayerJoinEvent;
 import fr.heriamc.games.engine.event.player.GamePlayerLeaveEvent;
@@ -74,10 +75,6 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
             this.playerCount += 1;
             settings.addBoardViewer(this, gamePlayer);
-
-            /*Bukkit.getOnlinePlayers().stream()
-                    .filter(Predicate.not(this::containsPlayer))
-                    .forEach(player::hidePlayer);*/
 
             Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
 

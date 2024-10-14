@@ -1,5 +1,6 @@
 package fr.heriamc.games.engine;
 
+import fr.heriamc.bukkit.game.size.GameSize;
 import fr.heriamc.games.engine.board.GameBoard;
 import fr.heriamc.games.engine.board.GameBoardManager;
 import fr.heriamc.games.engine.map.MapManager;

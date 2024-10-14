@@ -1,6 +1,6 @@
 package fr.heriamc.games.engine.utils;
 
-import fr.heriamc.games.engine.GameSize;
+import fr.heriamc.bukkit.game.size.GameSize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -24,7 +24,7 @@ public enum GameSizeTemplate {
     public static final EnumSet<GameSizeTemplate> templates = EnumSet.allOf(GameSizeTemplate.class);
 
     public GameSize toGameSize() {
-        return new GameSize(getName(), getMinPlayer(), getMaxPlayer(), getTeamNeeded(), getTeamMaxPlayer());
+        return new GameSize(name, minPlayer, maxPlayer, teamNeeded, teamMaxPlayer);
     }
 
 }

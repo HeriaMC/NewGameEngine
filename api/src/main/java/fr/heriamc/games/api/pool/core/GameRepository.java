@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -37,7 +34,7 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
 
     public GameRepository(GamePool<M> gamePool) {
         this.gamePool = gamePool;
-        this.gameProcessor = new GameLoaderProcessor<>(this, gamePool.getMaxPoolSize());
+        this.gameProcessor = new GameLoaderProcessor<>(gamePool);
         this.games = new ArrayList<>(gamePool.getMaxPoolSize());
     }
 
@@ -81,16 +78,21 @@ public class GameRepository<M extends MiniGame> implements GameManager<M> {
     }
 
     @Override
-    public void addGame(M game) {
+    public boolean addGame(M game) {
         if (gamePool.getMaxPoolSize() == games.size()) {
             log.warn("[GameManager] GAME POOL MAX SIZE ALREADY REACHED !");
-            return;
+            return false;
         }
 
-        gameProcessor.addGame(game);
+        var id = gamePool.getGameCreationCache().entrySet().stream()
+                .filter(entry -> game.equals(entry.getValue()))
+                .map(Map.Entry::getKey).findFirst().orElse(null);
+
+        gameProcessor.addGame(id, game);
         games.add(game);
         Bukkit.getPluginManager().callEvent(new GameAddedEvent<>(game, gamePool));
         log.info("[GameManager] GAME {} ADDED TO PROCESSOR QUEUE", game.getFullName());
+        return true;
     }
 
     @Override

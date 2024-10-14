@@ -1,5 +1,6 @@
 package fr.heriamc.games.core.pool;
 
+import fr.heriamc.api.server.HeriaServerType;
 import fr.heriamc.bukkit.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.DirectConnectStrategy;
 import fr.heriamc.games.api.pool.GamePool;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class GamePoolRepository implements GamePoolManager {
 
     private final List<Pool> gamePools;
+
     private final DynamicCache<UUID, GameJoinPacket> joinPacketCache;
 
     public GamePoolRepository() {
@@ -88,6 +90,12 @@ public class GamePoolRepository implements GamePoolManager {
     public Optional<Pool> getGamePool(String name) {
         return gamePools.stream()
                 .filter(gamePool -> gamePool.getName().contains(name)).findFirst();
+    }
+
+    @Override
+    public Optional<Pool> getGamePool(HeriaServerType type) {
+        return  gamePools.stream()
+                .filter(gamePool -> gamePool.getType() == type).findFirst();
     }
 
     @Override

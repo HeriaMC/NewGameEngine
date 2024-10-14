@@ -1,6 +1,7 @@
 package fr.heriamc.games.engine;
 
 import fr.heriamc.bukkit.game.GameState;
+import fr.heriamc.bukkit.game.size.GameSize;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

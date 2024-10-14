@@ -25,7 +25,7 @@ public class ThreadGui extends HeriaPaginationMenu<Thread> {
     private final static int[] borders = new int[] { 45, 46, 47, 51, 52, 53 };
 
     public ThreadGui(Player player) {
-        super(player, "§e§l» §6Threads", 54, true, slots, new ArrayList<>(Thread.getAllStackTraces().keySet()));
+        super(player, "§e§l» §6Threads", 54, true, slots, () -> new ArrayList<>(Thread.getAllStackTraces().keySet()));
 
         setLeftSlot(48);
         setRightSlot(50);

@@ -28,7 +28,7 @@ public interface GameManager<M extends MiniGame> {
 
     void leaveGame(Player player);
 
-    void addGame(M game);
+    boolean addGame(M game);
     void addGame(int number, Supplier<M> supplier);
 
     void removeGame(M game);

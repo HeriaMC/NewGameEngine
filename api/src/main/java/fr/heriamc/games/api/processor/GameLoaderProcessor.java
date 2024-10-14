@@ -1,28 +1,38 @@
 package fr.heriamc.games.api.processor;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.game.GameState;
+import fr.heriamc.bukkit.game.packet.GameCreatedPacket;
+import fr.heriamc.bukkit.game.packet.GameCreationResult;
 import fr.heriamc.games.api.pool.GameManager;
+import fr.heriamc.games.api.pool.GamePool;
 import fr.heriamc.games.engine.MiniGame;
+import fr.heriamc.games.engine.event.game.GameLoadedEvent;
+import fr.heriamc.games.engine.utils.Pair;
 import fr.heriamc.games.engine.utils.Utils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.bukkit.Bukkit;
 
+import java.util.UUID;
 import java.util.concurrent.*;
 
 @Getter
 @Slf4j
 public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M> {
 
+    private final GamePool<M> gamePool;
     private final GameManager<M> gameManager;
 
     private final ScheduledExecutorService executorService;
-    private final BlockingQueue<CompletableFuture<M>> queue;
+    private final BlockingQueue<CompletableFuture<Pair<UUID, M>>> queue;
 
-    public GameLoaderProcessor(GameManager<M> gameManager, int poolSize) {
-        this.gameManager = gameManager;
+    public GameLoaderProcessor(GamePool<M> gamePool) {
+        this.gamePool = gamePool;
+        this.gameManager = gamePool.getGamesManager();
         this.executorService = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("game-queue-processor-%d").build());
-        this.queue = new LinkedBlockingQueue<>(poolSize);
+        this.queue = new LinkedBlockingQueue<>(gamePool.getMaxPoolSize());
         this.executorService.scheduleAtFixedRate(this::process, 20, 20, TimeUnit.MILLISECONDS);
     }
 
@@ -34,7 +44,9 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
             try {
                 if (queue.isEmpty()) return;
 
-                var game = queue.peek().get();
+                var pair = queue.peek().get();
+                var id = pair.getKey();
+                var game = pair.getValue();
 
                 if (game.getState() == GameState.LOADING) {
                     log.info("[GameProcessor] START LOADING {}", game.getFullName());
@@ -44,6 +56,13 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
 
                 if (game.getState() == GameState.WAIT || game.getState() == GameState.ALWAYS_PLAYING) {
                     log.info("[GameProcessor] GAME : {} completely loaded", game.getFullName());
+                    Bukkit.getPluginManager().callEvent(new GameLoadedEvent<>(game, gamePool));
+
+                    if (id != null && gamePool.getGameCreationCache().containsKey(id))
+                        gamePool.sendGameCreatedPacket(new GameCreatedPacket(
+                                id, game.getFullName(),
+                                HeriaBukkit.get().getInstanceName(), GameCreationResult.SUCCESS));
+
                     queue.poll();
                     log.info("[GameProcessor] QUEUE: ELEMENTS LEFT={}", queue.size());
                 }
@@ -55,8 +74,8 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
     }
 
     @Override
-    public void addGame(M game) {
-        queue.add(CompletableFuture.supplyAsync(() -> game));
+    public void addGame(UUID uuid, M game) {
+        queue.add(CompletableFuture.supplyAsync(() -> new Pair<>(uuid, game)));
     }
 
     @Override

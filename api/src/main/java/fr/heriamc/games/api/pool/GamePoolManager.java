@@ -1,5 +1,6 @@
 package fr.heriamc.games.api.pool;
 
+import fr.heriamc.api.server.HeriaServerType;
 import fr.heriamc.bukkit.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.DirectConnectStrategy;
 import fr.heriamc.games.engine.MiniGame;
@@ -27,6 +28,7 @@ public interface GamePoolManager {
     void leaveGame(Player player);
 
     Optional<Pool> getGamePool(String name);
+    Optional<Pool> getGamePool(HeriaServerType type);
 
     Optional<MiniGame> getGame(Player player);
     Optional<MiniGame> getGameByID(String id);

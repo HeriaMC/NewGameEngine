@@ -1,6 +1,6 @@
 package fr.heriamc.games.core.test;
 
-import fr.heriamc.games.engine.GameSize;
+import fr.heriamc.bukkit.game.size.GameSize;
 import fr.heriamc.games.engine.SimpleGame;
 import fr.heriamc.games.engine.utils.GameSizeTemplate;
 

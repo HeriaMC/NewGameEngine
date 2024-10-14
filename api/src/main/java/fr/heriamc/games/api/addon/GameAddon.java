@@ -29,15 +29,15 @@ public abstract class GameAddon<P extends Pool> extends JavaPlugin implements Ad
 
     @Override
     public void onEnable() {
-        api = GameApi.getInstance();
-        heriaApi = HeriaAPI.get();
-        heriaBukkit = HeriaBukkit.get();
+        this.api = GameApi.getInstance();
+        this.heriaApi = HeriaAPI.get();
+        this.heriaBukkit = HeriaBukkit.get();
 
         api.getGamePoolManager().addPool(pool);
         pool.setup();
 
-        this.enable();
-        this.pool.sendDebugMessage();
+        enable();
+        pool.sendDebugMessage();
     }
 
     @Override
@@ -72,12 +72,12 @@ public abstract class GameAddon<P extends Pool> extends JavaPlugin implements Ad
 
     @Override
     public void redirectToHub(Player player) {
-        GameApi.getInstance().redirectToHub(player);
+        api.redirectToHub(player);
     }
 
     @Override
     public void redirectToHub(BaseGamePlayer gamePlayer) {
-        GameApi.getInstance().redirectToHub(gamePlayer);
+        api.redirectToHub(gamePlayer);
     }
 
     @Override
