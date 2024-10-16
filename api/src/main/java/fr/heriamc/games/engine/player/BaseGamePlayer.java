@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -67,6 +68,14 @@ public abstract class BaseGamePlayer {
 
     public boolean isAlive() {
         return !spectator;
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        player.setGameMode(gameMode);
+    }
+
+    public void setHealth(double health) {
+        player.setHealth(health);
     }
 
     public void sendTitle(int fadeIn, int stay, int fadeOut, String title, String subtitle) {

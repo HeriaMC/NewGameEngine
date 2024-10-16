@@ -12,15 +12,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @Getter
-public abstract class FFAGame<G extends FFAGamePlayer, S extends GameSettings<?>> extends SimpleGame<G, S> {
+public abstract class FFAGame<G extends FFAGamePlayer, S extends GameSettings<?>, P extends PersistentDataManager<?, ?>> extends SimpleGame<G, S> {
 
-    protected final PersistentDataManager<?, ?> dataManager;
-    protected final FFALobby ffaLobby;
+    protected final P dataManager;
+    protected final FFALobby lobby;
 
-    public FFAGame(String name, S settings, PersistentDataManager<?, ?> dataManager, FFALobby ffaLobby) {
+    public FFAGame(String name, S settings, P dataManager, FFALobby ffaLobby) {
         super(name, settings);
         this.dataManager = dataManager;
-        this.ffaLobby = ffaLobby;
+        this.lobby = ffaLobby;
     }
 
     @Override
@@ -28,11 +28,12 @@ public abstract class FFAGame<G extends FFAGamePlayer, S extends GameSettings<?>
         final var uuid = player.getUniqueId();
 
         if (!players.containsKey(uuid)) {
-            final var gamePlayer = players.put(uuid, defaultGamePlayer(uuid, spectator));
-
+            final var gamePlayer = defaultGamePlayer(uuid, spectator);
             this.playerCount += 1;
+
+            players.put(uuid, gamePlayer);
             settings.addBoardViewer(this, gamePlayer);
-            ffaLobby.onJoin(this, gamePlayer);
+            lobby.onJoin(this, gamePlayer);
 
             Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
 
@@ -44,7 +45,7 @@ public abstract class FFAGame<G extends FFAGamePlayer, S extends GameSettings<?>
     }
 
     public void play(G gamePlayer) {
-        ffaLobby.onPlay(this, gamePlayer);
+        lobby.onPlay(this, gamePlayer);
     }
 
 }

@@ -74,9 +74,10 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
         final var uuid = player.getUniqueId();
 
         if (!players.containsKey(uuid)) {
-            final var gamePlayer = players.put(uuid, defaultGamePlayer(uuid, spectator));
-
+            final var gamePlayer = defaultGamePlayer(uuid, spectator);
             this.playerCount += 1;
+
+            players.put(uuid, gamePlayer);
             settings.addBoardViewer(this, gamePlayer);
 
             Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
