@@ -28,10 +28,8 @@ public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlay
         var spawn = map.getSpawn();
         cleanUpPlayer(gamePlayer);
 
-        if (map != null && spawn != null) {
-            System.out.println("map not null " + map.getName());
+        if (map != null && spawn != null)
             spawn.syncTeleport(gamePlayer);
-        }
 
         onJoin(gamePlayer);
         giveItems(gamePlayer);

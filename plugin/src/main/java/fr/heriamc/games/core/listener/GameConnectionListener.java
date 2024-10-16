@@ -2,6 +2,7 @@ package fr.heriamc.games.core.listener;
 
 import fr.heriamc.bukkit.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.pool.GamePoolManager;
+import fr.heriamc.games.engine.event.player.GamePlayerSpectateEvent;
 import fr.heriamc.games.engine.utils.CacheUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.event.EventHandler;
@@ -44,6 +45,14 @@ public record GameConnectionListener(GamePoolManager gamePoolManager) implements
             gamePoolManager
                     .getGamePool(packet.getGameName())
                     .ifPresent(gamePool -> gamePool.getGamesManager().findGame(player));
+    }
+
+    @EventHandler
+    public void onPlayerSpectate(GamePlayerSpectateEvent<?, ?> event) {
+        var player = event.getPlayer();
+        var gamePlayer = event.getGamePlayer();
+
+        gamePlayer.sendMessage("You joined as spectator");
     }
 
     @EventHandler

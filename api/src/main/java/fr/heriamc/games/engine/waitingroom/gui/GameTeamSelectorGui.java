@@ -23,7 +23,7 @@ public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T
 
     @Override
     public void contents(Inventory inventory) {
-        setBorder(inventory, getTeam() != null ? getTeam().getColor().getDyeColor().getData() : DyeColor.WHITE.getData());
+        setBorder(inventory, team != null ? team.getColor().getDyeColor().getData() : DyeColor.WHITE.getData());
         insertInteractItem(inventory, 31, randomItem);
 
         for (int i = 0; i < fill.length; i++) {
@@ -40,7 +40,7 @@ public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T
         final var builder = new ItemBuilder(Material.WOOL, 1, team.getColor().getDyeColor().getWoolData())
                 .setName(team.getColoredName())
                 .onClick(event -> {
-                    if (getTeam() != null && getTeam().equals(team)) return;
+                    if (this.team != null && this.team.equals(team)) return;
 
                     if (team.canJoin()) {
                         game.addPlayerToTeam(gamePlayer, team);

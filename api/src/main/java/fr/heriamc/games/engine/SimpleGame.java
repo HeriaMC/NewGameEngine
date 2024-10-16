@@ -5,6 +5,7 @@ import fr.heriamc.bukkit.game.size.GameSize;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.engine.event.player.GamePlayerJoinEvent;
 import fr.heriamc.games.engine.event.player.GamePlayerLeaveEvent;
+import fr.heriamc.games.engine.event.player.GamePlayerSpectateEvent;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,7 +71,22 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
     @Override
     public void joinGame(Player player, boolean spectator) {
-        players.computeIfAbsent(player.getUniqueId(), uuid -> {
+        final var uuid = player.getUniqueId();
+
+        if (!players.containsKey(uuid)) {
+            final var gamePlayer = players.put(uuid, defaultGamePlayer(uuid, spectator));
+
+            this.playerCount += 1;
+            settings.addBoardViewer(this, gamePlayer);
+
+            Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
+
+            if (spectator)
+                Bukkit.getPluginManager().callEvent(new GamePlayerSpectateEvent<>(this, gamePlayer));
+
+            log.info("[{}] {} {} game.", getFullName(), player.getName(), spectator ? "spectate" : "joined");
+        }
+        /*players.computeIfAbsent(player.getUniqueId(), uuid -> {
             final var gamePlayer = defaultGamePlayer(uuid, spectator);
 
             this.playerCount += 1;
@@ -80,7 +96,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
             log.info("[{}] {} joined game.", getFullName(), player.getName());
             return gamePlayer;
-        });
+        });*/
     }
 
     @Override
@@ -187,17 +203,17 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
     @Override
     public boolean canStart() {
-        return /*getAlivePlayersCount()*/ playerCount >= gameSize.getMinPlayer();
+        return getAlivePlayersCount() >= gameSize.getMinPlayer();
     }
 
     @Override
     public boolean isFull() {
-        return /*getAlivePlayersCount()*/ playerCount == gameSize.getMaxPlayer();
+        return getAlivePlayersCount() == gameSize.getMaxPlayer();
     }
 
     @Override
     public boolean canJoin() {
-        return /*getAlivePlayersCount()*/ playerCount < gameSize.getMaxPlayer();
+        return getAlivePlayersCount() < gameSize.getMaxPlayer();
     }
 
     @Override

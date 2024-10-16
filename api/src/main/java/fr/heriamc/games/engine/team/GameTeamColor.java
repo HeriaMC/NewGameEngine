@@ -19,7 +19,9 @@ public enum GameTeamColor {
     WHITE ("Blanc", ChatColor.WHITE, DyeColor.WHITE),
     GRAY ("Gris", ChatColor.GRAY, DyeColor.GRAY),
     ORANGE ("Orange", ChatColor.GOLD, DyeColor.ORANGE),
-    PURPLE ("Violet", ChatColor.DARK_PURPLE, DyeColor.PURPLE);
+    PURPLE ("Violet", ChatColor.DARK_PURPLE, DyeColor.PURPLE),
+    PINK ("Rose", ChatColor.LIGHT_PURPLE, DyeColor.PINK),
+    CYAN ("Cyan", ChatColor.AQUA, DyeColor.CYAN);
 
     private final String name;
     private final ChatColor chatColor;
