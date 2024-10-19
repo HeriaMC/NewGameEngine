@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -68,6 +69,10 @@ public abstract class BaseGamePlayer {
 
     public boolean isAlive() {
         return !spectator;
+    }
+
+    public void playSound(Sound sound, float volume, float pitch) {
+        player.playSound(player.getLocation(), sound, volume, pitch);
     }
 
     public void setGameMode(GameMode gameMode) {
