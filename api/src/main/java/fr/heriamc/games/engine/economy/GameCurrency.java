@@ -18,12 +18,12 @@ public abstract class GameCurrency<N extends Number> implements GameEconomy<N> {
 
     @Override
     public String getWalletFormated() {
-        return wallet + symbol;
+        return wallet + " " + symbol;
     }
 
     @Override
     public String getWalletFormated(DecimalFormat decimalFormat) {
-        return decimalFormat.format(wallet) + symbol;
+        return decimalFormat.format(wallet) + " " + symbol;
     }
 
 }
