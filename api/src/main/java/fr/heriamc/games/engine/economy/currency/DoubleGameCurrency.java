@@ -23,9 +23,4 @@ public class DoubleGameCurrency extends GameCurrency<Double> {
         return wallet >= amount;
     }
 
-    @Override
-    public String getWalletFormated() {
-        return wallet + symbol;
-    }
-
 }

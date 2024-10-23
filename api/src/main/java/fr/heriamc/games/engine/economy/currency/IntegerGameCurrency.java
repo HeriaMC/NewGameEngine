@@ -23,9 +23,4 @@ public class IntegerGameCurrency extends GameCurrency<Integer> {
         return wallet >= amount;
     }
 
-    @Override
-    public String getWalletFormated() {
-        return wallet + symbol;
-    }
-
 }

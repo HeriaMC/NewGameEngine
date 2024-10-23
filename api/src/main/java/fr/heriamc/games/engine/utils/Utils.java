@@ -3,7 +3,6 @@ package fr.heriamc.games.engine.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.heriamc.games.engine.point.SinglePoint;
-import fr.heriamc.games.engine.region.GameRegion;
 import fr.heriamc.games.engine.utils.func.ThrowingRunnable;
 import fr.heriamc.games.engine.utils.json.adapter.LocationAdapter;
 import fr.heriamc.games.engine.utils.json.adapter.SpawnPointAdapter;
@@ -22,6 +21,7 @@ import java.util.function.Predicate;
 public class Utils {
 
     public final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    public final DecimalFormat complexDecimalFormat = new DecimalFormat("#,##0.##");
 
     public final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Location.class, new LocationAdapter())

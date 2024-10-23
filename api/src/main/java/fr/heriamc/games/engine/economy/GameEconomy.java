@@ -2,6 +2,7 @@ package fr.heriamc.games.engine.economy;
 
 import fr.heriamc.games.engine.utils.Utils;
 
+import java.text.DecimalFormat;
 import java.util.function.Function;
 
 public interface GameEconomy<N extends Number> {
@@ -19,6 +20,7 @@ public interface GameEconomy<N extends Number> {
     boolean has(N amount);
 
     String getWalletFormated();
+    String getWalletFormated(DecimalFormat decimalFormat);
 
     default void reset() {
         remove(getWallet());
