@@ -32,6 +32,7 @@ public abstract class GameAddon<P extends Pool> extends JavaPlugin implements Ad
         this.api = GameApi.getInstance();
         this.heriaApi = HeriaAPI.get();
         this.heriaBukkit = HeriaBukkit.get();
+        this.commandManager = heriaBukkit.getCommandManager();
 
         api.getGamePoolManager().addPool(pool);
         pool.setup();
@@ -53,9 +54,6 @@ public abstract class GameAddon<P extends Pool> extends JavaPlugin implements Ad
 
     @Override
     public void registerCommand(Object object) {
-        if (commandManager == null)
-            commandManager = new HeriaCommandManager(this);
-
         commandManager.registerCommand(object);
     }
 
