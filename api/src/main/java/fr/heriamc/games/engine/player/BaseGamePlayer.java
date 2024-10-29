@@ -83,6 +83,10 @@ public abstract class BaseGamePlayer {
         player.setHealth(health);
     }
 
+    public void closeInventory() {
+        player.closeInventory();
+    }
+
     public void sendTitle(int fadeIn, int stay, int fadeOut, String title, String subtitle) {
         MultiThreading.execute(() ->
                 sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut),
