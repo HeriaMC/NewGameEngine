@@ -1,6 +1,6 @@
 package fr.heriamc.games.core.listener;
 
-import fr.heriamc.bukkit.game.packet.GameJoinPacket;
+import fr.heriamc.api.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.pool.GamePoolManager;
 import fr.heriamc.games.engine.event.player.GamePlayerSpectateEvent;
 import fr.heriamc.games.engine.utils.CacheUtils;

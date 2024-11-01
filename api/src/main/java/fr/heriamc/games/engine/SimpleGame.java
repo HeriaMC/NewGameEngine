@@ -1,7 +1,7 @@
 package fr.heriamc.games.engine;
 
-import fr.heriamc.bukkit.game.GameState;
-import fr.heriamc.bukkit.game.size.GameSize;
+import fr.heriamc.api.game.GameState;
+import fr.heriamc.api.game.size.GameSize;
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.engine.event.player.GamePlayerJoinEvent;
 import fr.heriamc.games.engine.event.player.GamePlayerLeaveEvent;

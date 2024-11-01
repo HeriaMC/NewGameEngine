@@ -1,6 +1,6 @@
 package fr.heriamc.games.api.pool;
 
-import fr.heriamc.bukkit.game.GameState;
+import fr.heriamc.api.game.GameState;
 import fr.heriamc.games.api.processor.GameProcessor;
 import fr.heriamc.games.engine.MiniGame;
 import fr.heriamc.games.engine.player.BaseGamePlayer;

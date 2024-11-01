@@ -1,10 +1,10 @@
 package fr.heriamc.games.api.processor;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import fr.heriamc.api.game.GameState;
+import fr.heriamc.api.game.packet.GameCreatedPacket;
+import fr.heriamc.api.game.packet.GameCreationResult;
 import fr.heriamc.bukkit.HeriaBukkit;
-import fr.heriamc.bukkit.game.GameState;
-import fr.heriamc.bukkit.game.packet.GameCreatedPacket;
-import fr.heriamc.bukkit.game.packet.GameCreationResult;
 import fr.heriamc.games.api.pool.GameManager;
 import fr.heriamc.games.api.pool.GamePool;
 import fr.heriamc.games.engine.MiniGame;

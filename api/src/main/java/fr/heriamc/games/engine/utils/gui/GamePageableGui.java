@@ -1,5 +1,7 @@
 package fr.heriamc.games.engine.utils.gui;
 
+import fr.heriamc.bukkit.HeriaBukkit;
+import fr.heriamc.bukkit.menu.HeriaMenu;
 import fr.heriamc.bukkit.menu.pagination.HeriaPaginationMenu;
 import fr.heriamc.games.engine.Game;
 import fr.heriamc.games.engine.player.GamePlayer;
@@ -17,6 +19,10 @@ public abstract class GamePageableGui<M extends Game<G, T, ?>, G extends GamePla
         super(gamePlayer.getPlayer(), name, size, update, slots, items);
         this.game = game;
         this.gamePlayer = gamePlayer;
+    }
+
+    protected void openGui(HeriaMenu heriaMenu) {
+        HeriaBukkit.get().getMenuManager().open(heriaMenu);
     }
 
 }

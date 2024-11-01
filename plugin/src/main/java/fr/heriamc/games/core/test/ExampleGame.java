@@ -1,8 +1,8 @@
 package fr.heriamc.games.core.test;
 
-import fr.heriamc.bukkit.game.size.GameSize;
+import fr.heriamc.api.game.size.GameSize;
+import fr.heriamc.api.game.size.GameSizeTemplate;
 import fr.heriamc.games.engine.SimpleGame;
-import fr.heriamc.games.engine.utils.GameSizeTemplate;
 
 import java.util.UUID;
 

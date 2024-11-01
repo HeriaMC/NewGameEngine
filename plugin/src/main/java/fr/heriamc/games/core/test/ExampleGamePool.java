@@ -1,10 +1,10 @@
 package fr.heriamc.games.core.test;
 
+import fr.heriamc.api.game.size.GameSize;
+import fr.heriamc.api.game.size.GameSizeTemplate;
 import fr.heriamc.api.server.HeriaServerType;
-import fr.heriamc.bukkit.game.size.GameSize;
 import fr.heriamc.games.api.DirectConnectStrategy;
 import fr.heriamc.games.api.pool.GamePool;
-import fr.heriamc.games.engine.utils.GameSizeTemplate;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;

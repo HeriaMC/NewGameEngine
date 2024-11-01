@@ -1,7 +1,7 @@
 package fr.heriamc.games.api.pool;
 
+import fr.heriamc.api.game.packet.GameJoinPacket;
 import fr.heriamc.api.server.HeriaServerType;
-import fr.heriamc.bukkit.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.DirectConnectStrategy;
 import fr.heriamc.games.engine.MiniGame;
 import fr.heriamc.games.engine.utils.cache.DynamicCache;

@@ -1,6 +1,6 @@
 package fr.heriamc.games.engine.utils;
 
-import fr.heriamc.bukkit.game.size.GameSize;
+import fr.heriamc.api.game.size.GameSize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

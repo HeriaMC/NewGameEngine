@@ -29,4 +29,8 @@ public abstract class BaseGamePageableGui<M extends MiniGame, G extends BaseGame
         else HeriaBukkit.get().getMenuManager().open(beforeMenu);
     }
 
+    protected void openGui(HeriaMenu heriaMenu) {
+        HeriaBukkit.get().getMenuManager().open(heriaMenu);
+    }
+
 }

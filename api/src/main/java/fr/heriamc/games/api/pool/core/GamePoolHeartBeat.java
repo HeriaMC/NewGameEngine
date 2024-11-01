@@ -1,9 +1,10 @@
 package fr.heriamc.games.api.pool.core;
 
+import fr.heriamc.api.HeriaAPI;
+import fr.heriamc.api.game.HeriaGameInfo;
+import fr.heriamc.api.game.HeriaGameManager;
+import fr.heriamc.api.game.HeriaGamesList;
 import fr.heriamc.bukkit.HeriaBukkit;
-import fr.heriamc.bukkit.game.HeriaGameInfo;
-import fr.heriamc.bukkit.game.HeriaGameManager;
-import fr.heriamc.bukkit.game.HeriaGamesList;
 import fr.heriamc.games.api.pool.GamePool;
 import fr.heriamc.games.engine.MiniGame;
 import fr.heriamc.games.engine.utils.concurrent.VirtualThreading;
@@ -26,7 +27,7 @@ public class GamePoolHeartBeat<M extends MiniGame> implements Runnable {
     public GamePoolHeartBeat(GamePool<M> gamePool) {
         this.games = gamePool.getGamesManager().getGames();
         this.serverName = HeriaBukkit.get().getInstanceName();
-        this.gameManager = HeriaBukkit.get().getHeriaGameManager();
+        this.gameManager = HeriaAPI.get().getHeriaGameManager();
         this.gamesList = new HeriaGamesList(gamePool.getType(), serverName, new ArrayList<>(gamePool.getMaxPoolSize()));
         VirtualThreading.scheduledPool.scheduleAtFixedRate(this, 1, 1, TimeUnit.SECONDS);
     }

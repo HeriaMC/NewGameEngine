@@ -1,12 +1,12 @@
 package fr.heriamc.games.core.listener;
 
 import fr.heriamc.api.HeriaAPI;
+import fr.heriamc.api.game.packet.GameCreatedPacket;
+import fr.heriamc.api.game.packet.GameCreationRequestPacket;
+import fr.heriamc.api.game.packet.GameJoinPacket;
 import fr.heriamc.api.messaging.packet.HeriaPacket;
 import fr.heriamc.api.messaging.packet.HeriaPacketReceiver;
 import fr.heriamc.bukkit.HeriaBukkit;
-import fr.heriamc.bukkit.game.packet.GameCreatedPacket;
-import fr.heriamc.bukkit.game.packet.GameCreationRequestPacket;
-import fr.heriamc.bukkit.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.pool.GamePoolManager;
 import lombok.extern.slf4j.Slf4j;
 

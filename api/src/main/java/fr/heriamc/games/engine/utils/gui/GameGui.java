@@ -1,5 +1,6 @@
 package fr.heriamc.games.engine.utils.gui;
 
+import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.menu.HeriaMenu;
 import fr.heriamc.games.engine.Game;
 import fr.heriamc.games.engine.player.GamePlayer;
@@ -24,6 +25,10 @@ public abstract class GameGui<M extends Game<G, T, ?>, G extends GamePlayer<T>, 
         this.game = game;
         this.gamePlayer = gamePlayer;
         this.team = gamePlayer.getTeam();
+    }
+
+    protected void openGui(HeriaMenu heriaMenu) {
+        HeriaBukkit.get().getMenuManager().open(heriaMenu);
     }
 
 }

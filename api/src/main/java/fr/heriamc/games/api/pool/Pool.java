@@ -1,8 +1,8 @@
 package fr.heriamc.games.api.pool;
 
+import fr.heriamc.api.game.packet.GameCreatedPacket;
+import fr.heriamc.api.game.packet.GameCreationRequestPacket;
 import fr.heriamc.api.server.HeriaServerType;
-import fr.heriamc.bukkit.game.packet.GameCreatedPacket;
-import fr.heriamc.bukkit.game.packet.GameCreationRequestPacket;
 import fr.heriamc.games.api.DirectConnectStrategy;
 import fr.heriamc.games.api.pool.core.GamePoolHeartBeat;
 import fr.heriamc.games.engine.MiniGame;
