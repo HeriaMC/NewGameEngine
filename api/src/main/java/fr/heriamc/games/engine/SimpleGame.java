@@ -87,17 +87,6 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
 
             log.info("[{}] {} {} game.", getFullName(), player.getName(), spectator ? "spectate" : "joined");
         }
-        /*players.computeIfAbsent(player.getUniqueId(), uuid -> {
-            final var gamePlayer = defaultGamePlayer(uuid, spectator);
-
-            this.playerCount += 1;
-            settings.addBoardViewer(this, gamePlayer);
-
-            Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
-
-            log.info("[{}] {} joined game.", getFullName(), player.getName());
-            return gamePlayer;
-        });*/
     }
 
     @Override
@@ -240,7 +229,7 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
         sender.sendMessage("Condition: cj=" + canJoin() + ", cs=" + canStart() + ", isf=" + isFull());
         sender.sendMessage("State: " + state);
 
-        sender.sendMessage("Locations: ");
+        //sender.sendMessage("Locations: ");
         //getSettings().getSpawnPoints().stream().map(SpawnPoint::getDebugMessage).forEach(sender::sendMessage);
 
         sender.sendMessage("Players: " + playerCount + " (" + getAlivePlayersCount() + "|" + getSpectatorsCount() + ")");

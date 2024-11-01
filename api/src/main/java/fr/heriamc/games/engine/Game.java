@@ -155,7 +155,7 @@ public abstract class Game<G extends GamePlayer<T>, T extends GameTeam<G>, S ext
         sender.sendMessage("Condition: cj=" + canJoin() + ", cs=" + canStart() + ", isf=" + isFull() + ", ota=" + oneTeamAlive());
         sender.sendMessage("State: " + getState());
 
-        sender.sendMessage("Locations: ");
+        //sender.sendMessage("Locations: ");
         //getSettings().getSpawnPoints().stream().map(SpawnPoint::getDebugMessage).forEach(sender::sendMessage);
 
         sender.sendMessage("Team Alive: " + getAliveTeamsCount());

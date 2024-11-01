@@ -40,6 +40,8 @@ public interface GamePoolManager {
 
     Pool getGamePoolByClass(Class<Pool> clazz);
 
+    List<MiniGame> getAllGames();
+
     List<Pool> getGamePoolByStrategy(DirectConnectStrategy strategy);
     List<Pool> getGamePoolByStrategy(EnumSet<DirectConnectStrategy> strategies);
 

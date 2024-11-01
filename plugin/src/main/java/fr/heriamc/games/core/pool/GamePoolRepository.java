@@ -144,6 +144,13 @@ public class GamePoolRepository implements GamePoolManager {
     }
 
     @Override
+    public List<MiniGame> getAllGames() {
+        return gamePools.stream()
+                .flatMap(pool -> pool.getGamesManager().getGames().stream())
+                .toList();
+    }
+
+    @Override
     public List<Pool> getGamePoolByStrategy(DirectConnectStrategy strategy) {
         return gamePools.stream()
                 .filter(gamePool -> gamePool.getStrategy().equals(strategy))
