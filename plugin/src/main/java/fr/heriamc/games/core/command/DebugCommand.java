@@ -10,6 +10,7 @@ public record DebugCommand(GameEngine plugin) {
 
     /*
         DEBUG GAME
+        UNUSED SHOULD BE DELETED OR REMADE FOR ADD SOME AND OTHERS DEBUG NECESSARY FOR FOUND PROBLEMS
      */
 
     @HeriaCommand(name = "showListeners")

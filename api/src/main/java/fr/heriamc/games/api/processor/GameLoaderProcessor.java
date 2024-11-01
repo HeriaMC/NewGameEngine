@@ -51,11 +51,14 @@ public class GameLoaderProcessor<M extends MiniGame> implements GameProcessor<M>
                 if (game.getState() == GameState.LOADING) {
                     log.info("[GameProcessor] START LOADING {}", game.getFullName());
                     game.load();
+                    gamePool.getGamePoolHeartBeat().forceUpdate();
                     game.setState(GameState.LOADING_IN_PROGRESS);
                 }
 
                 if (game.getState() == GameState.WAIT || game.getState() == GameState.ALWAYS_PLAYING) {
                     log.info("[GameProcessor] GAME : {} completely loaded", game.getFullName());
+                    gamePool.getGamePoolHeartBeat().forceUpdate();
+
                     Bukkit.getPluginManager().callEvent(new GameLoadedEvent<>(game, gamePool));
 
                     if (id != null && gamePool.getGameCreationCache().containsKey(id))

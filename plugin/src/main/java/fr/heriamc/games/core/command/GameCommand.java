@@ -1,5 +1,6 @@
 package fr.heriamc.games.core.command;
 
+import fr.heriamc.api.user.rank.HeriaRank;
 import fr.heriamc.bukkit.command.CommandArgs;
 import fr.heriamc.bukkit.command.HeriaCommand;
 import fr.heriamc.games.api.pool.GamePoolManager;
@@ -7,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public record GameCommand(GamePoolManager gamePoolManager) {
 
-    @HeriaCommand(name = "game", usage = "/game info (id)")
+    @HeriaCommand(name = "game", power = HeriaRank.PLAYER, showInHelp = false)
     public void gameDebugCommand(CommandArgs commandArgs) {
         Player player = commandArgs.getPlayer();
 

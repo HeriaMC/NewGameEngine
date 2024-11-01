@@ -8,7 +8,7 @@ import fr.heriamc.games.core.event.GameEventBus;
 import fr.heriamc.games.core.pool.GamePoolRepository;
 import fr.heriamc.games.engine.event.EventBus;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
-import fr.heriamc.proxy.packet.SendPlayerPacket;
+import fr.heriamc.proxy.queue.packet.QueueJoinPacket;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -37,9 +37,11 @@ public class GameApiProvider implements GameApi {
 
     @Override
     public void redirectToHub(Player player) {
-        var hub = heriaAPI.getServerManager().getWithLessPlayers(HeriaServerType.HUB);
+        var heriaPlayer = heriaAPI.getPlayerManager().get(player.getUniqueId());
 
-        heriaAPI.getMessaging().send(new SendPlayerPacket(player.getUniqueId(), hub.getName()));
+        if (heriaPlayer.isInQueue()) return;
+
+        heriaAPI.getMessaging().send(new QueueJoinPacket(player.getUniqueId(), null, null, HeriaServerType.HUB, null));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class GamePoolHeartBeat<M extends MiniGame> implements Runnable {
         this.serverName = HeriaBukkit.get().getInstanceName();
         this.gameManager = HeriaAPI.get().getHeriaGameManager();
         this.gamesList = new HeriaGamesList(gamePool.getType(), serverName, new ArrayList<>(gamePool.getMaxPoolSize()));
-        VirtualThreading.scheduledPool.scheduleAtFixedRate(this, 1, 1, TimeUnit.SECONDS);
+        VirtualThreading.scheduledPool.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
     }
 
     @Override
@@ -37,8 +37,12 @@ public class GamePoolHeartBeat<M extends MiniGame> implements Runnable {
         gameManager.put(gamesList.setGames(getGameInfos()));
     }
 
+    public void forceUpdate() {
+        gameManager.put(gamesList.setGames(getGameInfos()));
+    }
+
     public void shutdown() {
-        gameManager.getAllInCache().forEach(gameManager::remove);
+        gameManager.remove(serverName);
     }
 
     public List<HeriaGameInfo> getGameInfos() {

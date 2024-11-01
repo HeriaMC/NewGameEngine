@@ -10,8 +10,8 @@ import java.util.UUID;
 @Setter
 public abstract class FFAGamePlayer extends SimpleGamePlayer {
 
-    private int killStreak, bestKillStreak;
-    private FFAGamePlayerState state;
+    protected int killStreak, bestKillStreak;
+    protected FFAGamePlayerState state;
 
     public FFAGamePlayer(UUID uuid, int kills, int deaths, int killStreak, int bestKillStreak, boolean spectator) {
         super(uuid, kills, deaths, spectator);
