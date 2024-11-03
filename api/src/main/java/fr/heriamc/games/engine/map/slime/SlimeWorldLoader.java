@@ -8,7 +8,6 @@ import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
 import fr.heriamc.games.engine.map.GameMapLoader;
 import fr.heriamc.games.engine.utils.concurrent.BukkitThreading;
 import fr.heriamc.games.engine.utils.concurrent.MultiThreading;
-import fr.heriamc.games.engine.utils.func.ThrowingRunnable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

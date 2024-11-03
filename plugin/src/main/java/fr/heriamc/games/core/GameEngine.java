@@ -27,6 +27,7 @@ import java.util.UUID;
 
 @Slf4j
 @Getter
+// DELETE THIS SHIT XD
 @Authors(@Author("Joupi"))
 @Plugin(name = "HeriaGameEngine", version = "1.0.0")
 @DependsOn({ @Dependency("SlimeWorldManager"), @Dependency("HeriaAPI") })
@@ -47,27 +48,28 @@ public class GameEngine extends JavaPlugin {
         var heriaApi = HeriaAPI.get();
         var heriaBukkit = HeriaBukkit.get();
         var commandManager = heriaBukkit.getCommandManager();
+        var gamePoolManager = gameApi.getGamePoolManager();
 
         if (gameApi.isDevMode()) {
             this.gamePool = new ExampleGamePool();
 
             commandManager.registerCommand(new DebugCommand(this));
-            gameApi.getGamePoolManager().addPool(gamePool);
+            gamePoolManager.addPool(gamePool);
 
             gamePool.addGame(2);
             gamePool.addGame(UUID.randomUUID(), GameSizeTemplate.SIZE_4V4.toGameSize());
         }
 
         commandManager.registerCommand(new ThreadGuiCommand(heriaBukkit));
-        commandManager.registerCommand(new GameCommand(heriaBukkit.getMenuManager(), gameApi.getGamePoolManager()));
+        commandManager.registerCommand(new GameCommand(heriaBukkit.getMenuManager(), gamePoolManager));
 
         gameApi.getEventBus().registerListeners(
-                new GameConnectionListener(gameApi.getGamePoolManager()),
+                new GameConnectionListener(gamePoolManager, gamePoolManager.getJoinPacketCache()),
                 new GameCancelListener()
         );
 
         heriaApi.getMessaging()
-                .registerReceiver(HeriaPacketChannel.GAME, new GamePacketListener(gameApi.getGamePoolManager(), heriaApi));
+                .registerReceiver(HeriaPacketChannel.GAME, new GamePacketListener(gamePoolManager, heriaApi));
     }
 
     @Override

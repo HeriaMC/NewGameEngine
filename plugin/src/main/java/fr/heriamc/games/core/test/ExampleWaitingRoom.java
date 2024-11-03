@@ -2,10 +2,10 @@ package fr.heriamc.games.core.test;
 
 import fr.heriamc.games.engine.waitingroom.GameWaitingRoom;
 
-public class ExampleWaitingRoom extends GameWaitingRoom<ExampleGame, ExampleGamePlayer> {
+public class ExampleWaitingRoom extends GameWaitingRoom<ExampleGame, ExampleGamePlayer, ExampleWaitingItems> {
 
     public ExampleWaitingRoom(ExampleGame game) {
-        super(game);
+        super(game, ExampleWaitingItems.class);
     }
 
     @Override
@@ -15,11 +15,6 @@ public class ExampleWaitingRoom extends GameWaitingRoom<ExampleGame, ExampleGame
 
     @Override
     public void onLeave(ExampleGamePlayer gamePlayer) {
-
-    }
-
-    @Override
-    public void giveItems(ExampleGamePlayer gamePlayer) {
 
     }
 

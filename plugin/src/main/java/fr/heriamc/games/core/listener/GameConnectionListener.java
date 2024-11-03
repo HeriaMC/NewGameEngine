@@ -4,6 +4,7 @@ import fr.heriamc.api.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.pool.GamePoolManager;
 import fr.heriamc.games.engine.event.player.GamePlayerSpectateEvent;
 import fr.heriamc.games.engine.utils.CacheUtils;
+import fr.heriamc.games.engine.utils.cache.DynamicCache;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,27 +13,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
+
 @Slf4j
-public record GameConnectionListener(GamePoolManager gamePoolManager) implements Listener {
+public record GameConnectionListener(GamePoolManager gamePoolManager, DynamicCache<UUID, GameJoinPacket> cache) implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onLogin(PlayerLoginEvent event) {
-        var uuid = event.getPlayer().getUniqueId();
-
-        /*
-            DEBUG SHOULD BE CHANGED !!!
-         */
-        var name = gamePoolManager.getGamePools().getFirst().getName();
-        var packet = new GameJoinPacket(uuid, name,false);
-
-        gamePoolManager.getJoinPacketCache().put(uuid, packet);
+    public void onPlayerLogin(PlayerLoginEvent event) {
         gamePoolManager.joinWithPacket(event);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         var player = event.getPlayer();
-        var packet = gamePoolManager.getJoinPacketCache().getIfPresent(player.getUniqueId());
+        var packet = cache.getIfPresent(player.getUniqueId());
 
         if (packet == null) return;
 
@@ -40,11 +34,17 @@ public record GameConnectionListener(GamePoolManager gamePoolManager) implements
             gamePoolManager
                     .getGameByID(packet.getGameName())
                     .filter(game -> game.canJoin() || packet.isSpectator())
-                    .ifPresent(game -> game.joinGame(player, packet.isSpectator()));
+                    .ifPresent(game -> {
+                        game.joinGame(player, packet.isSpectator());
+                        cache.invalidate(player.getUniqueId());
+                    });
         else
             gamePoolManager
                     .getGamePool(packet.getGameName())
-                    .ifPresent(gamePool -> gamePool.getGamesManager().findGame(player));
+                    .ifPresent(gamePool -> {
+                        gamePool.getGamesManager().findGame(player);
+                        cache.invalidate(player.getUniqueId());
+                    });
     }
 
     @EventHandler
@@ -64,7 +64,7 @@ public record GameConnectionListener(GamePoolManager gamePoolManager) implements
                 .forEach(cooldown -> cooldown.invalidate(player.getUniqueId()));
 
         gamePoolManager.leaveGame(player);
-        gamePoolManager.getJoinPacketCache().invalidate(player.getUniqueId());
+        cache.invalidate(player.getUniqueId());
     }
 
 }

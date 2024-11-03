@@ -38,7 +38,7 @@ public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T
 
     public ItemBuilder getTeamButton(T team) {
         final var builder = new ItemBuilder(Material.WOOL, 1, team.getColor().getDyeColor().getWoolData())
-                .setName(team.getColoredName())
+                .setName(team.getColoredName() + (team.isMember(gamePlayer) ? " §a[Sélectionner]" : ""))
                 .onClick(event -> {
                     if (this.team != null && this.team.equals(team)) return;
 

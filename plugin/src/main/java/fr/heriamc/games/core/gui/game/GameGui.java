@@ -1,13 +1,11 @@
 package fr.heriamc.games.core.gui.game;
 
 import fr.heriamc.api.game.GameState;
-import fr.heriamc.api.utils.HeriaSkull;
 import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.menu.pagination.HeriaPaginationMenu;
 import fr.heriamc.bukkit.utils.ItemBuilder;
 import fr.heriamc.games.api.pool.GamePoolManager;
 import fr.heriamc.games.engine.MiniGame;
-import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -40,8 +38,8 @@ public class GameGui extends HeriaPaginationMenu<MiniGame> {
         var state = game.getState();
 
         return new ItemBuilder(Material.SKULL_ITEM, 1, (short) 3)
-                .setName(chooseColor(state) + game.getFullName())
-                .setSkullURL(chooseSkull(state))
+                .setName(state.getColor().getColor() + game.getFullName())
+                .setSkullURL(state.getSkull().getURL())
                 .setLoreWithList(
                         " ",
                         "§8» §7Type: §6" + game.getGameSize().getName().toUpperCase(),
@@ -57,29 +55,13 @@ public class GameGui extends HeriaPaginationMenu<MiniGame> {
 
     private String chooseName(GameState state) {
         return switch (state) {
-            case LOADING -> "§cChargement";
-            case LOADING_IN_PROGRESS -> "§cChargement en cours...";
-            case WAIT -> "§aAttente";
-            case ALWAYS_PLAYING -> "§aPartie en continue";
-            case STARTING -> "§aDémarage";
-            case IN_GAME -> "§eEn jeu";
-            case END -> "§cFin";
-        };
-    }
-
-    private ChatColor chooseColor(GameState state) {
-        return switch (state) {
-            case LOADING, LOADING_IN_PROGRESS, END -> ChatColor.RED;
-            case WAIT, ALWAYS_PLAYING, STARTING -> ChatColor.GREEN;
-            case IN_GAME -> ChatColor.YELLOW;
-        };
-    }
-
-    private String chooseSkull(GameState state) {
-        return switch (state) {
-            case LOADING, LOADING_IN_PROGRESS, END -> HeriaSkull.RED.getURL();
-            case WAIT, ALWAYS_PLAYING, STARTING -> HeriaSkull.LIME.getURL();
-            case IN_GAME -> HeriaSkull.ORANGE.getURL();
+            case LOADING -> state.getColor().getColor() + "Chargement";
+            case LOADING_IN_PROGRESS -> state.getColor().getColor() + "Chargement en cours...";
+            case WAIT -> state.getColor().getColor() + "Attente";
+            case ALWAYS_PLAYING -> state.getColor().getColor() + "Partie en continue";
+            case STARTING -> state.getColor().getColor() + "Démarage";
+            case IN_GAME -> state.getColor().getColor() + "En jeu";
+            case END -> state.getColor().getColor() + "Fin";
         };
     }
 

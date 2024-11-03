@@ -5,24 +5,26 @@ import fr.heriamc.games.engine.map.Map;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
 import fr.heriamc.games.engine.utils.task.countdown.CountdownTask;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.GameMode;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlayer> {
+public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlayer, I extends Enum<I> & WaitingRoomItems> {
 
     protected final M game;
+    protected final I[] items;
 
     protected Map map;
     protected CountdownTask countdownTask;
 
+    public GameWaitingRoom(M game, Class<I> itemsClass) {
+        this.game = game;
+        this.items = itemsClass.getEnumConstants();
+    }
+
     public abstract void onJoin(G gamePlayer);
     public abstract void onLeave(G gamePlayer);
-
-    protected abstract void giveItems(G gamePlayer);
 
     public void processJoin(G gamePlayer) {
         var spawn = map.getSpawn();
@@ -31,14 +33,20 @@ public abstract class GameWaitingRoom<M extends MiniGame, G extends BaseGamePlay
         if (map != null && spawn != null)
             spawn.syncTeleport(gamePlayer);
 
-        onJoin(gamePlayer);
         giveItems(gamePlayer);
         tryToStartTimer();
+        onJoin(gamePlayer);
     }
 
     public void processLeave(G gamePlayer) {
         onLeave(gamePlayer);
         tryToCancelTimer();
+    }
+
+    public void giveItems(G gamePlayer) {
+        for (I item : items) {
+            gamePlayer.getInventory().setItem(item.getSlot(), item.getItemStack());
+        }
     }
 
     public void cleanUpPlayer(G gamePlayer) {

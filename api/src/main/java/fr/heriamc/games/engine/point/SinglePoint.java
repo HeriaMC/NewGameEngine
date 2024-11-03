@@ -2,7 +2,6 @@ package fr.heriamc.games.engine.point;
 
 import fr.heriamc.games.engine.map.Map;
 import fr.heriamc.games.engine.player.BaseGamePlayer;
-import fr.heriamc.games.engine.utils.CollectionUtils;
 import fr.heriamc.games.engine.utils.concurrent.BukkitThreading;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

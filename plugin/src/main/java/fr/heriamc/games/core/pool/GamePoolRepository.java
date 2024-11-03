@@ -49,11 +49,15 @@ public class GamePoolRepository implements GamePoolManager {
 
     @Override
     public void joinWithPacket(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        GameJoinPacket packet = joinPacketCache.getIfPresent(uuid);
+        var player = event.getPlayer();
+        var uuid = player.getUniqueId();
+        var packet = joinPacketCache.getIfPresent(uuid);
 
-        if (packet == null) return;
+        if (packet == null) {
+            player.sendMessage("[GamePoolManager] YOU JOINED ABNORMALLY THIS SERVER YOU SHOULD GO BACK TO HUB");
+            log.info("[GamePoolManager] {} join without packet", player.getName());
+            return;
+        }
 
         if (packet.getGameName().contains("-")) {
             log.info("[GamePoolManager] {} try to join game '{}'", player.getName(), packet.getGameName());
@@ -72,7 +76,7 @@ public class GamePoolRepository implements GamePoolManager {
 
         getGamePool(packet.getGameName()).ifPresentOrElse(
                 gamePool -> event.allow(),
-                () -> denyConnection(event, uuid, "Aucune game disponible"));
+                () -> denyConnection(event, uuid, "Aucune partie disponible"));
     }
 
     private void denyConnection(PlayerLoginEvent event, UUID uuid, String message) {

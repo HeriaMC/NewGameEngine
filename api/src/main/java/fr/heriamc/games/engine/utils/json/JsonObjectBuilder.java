@@ -2,10 +2,7 @@ package fr.heriamc.games.engine.utils.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import lombok.AccessLevel;
-import lombok.Getter;
 
-@Getter(value = AccessLevel.PRIVATE)
 public class JsonObjectBuilder {
 
     private final JsonObject jsonObject;
@@ -19,37 +16,37 @@ public class JsonObjectBuilder {
     }
 
     public JsonObjectBuilder add(String key, String value) {
-        getJsonObject().addProperty(key, value);
+        jsonObject.addProperty(key, value);
         return this;
     }
 
     public JsonObjectBuilder add(String key, boolean value) {
-        getJsonObject().addProperty(key, value);
+        jsonObject.addProperty(key, value);
         return this;
     }
 
     public JsonObjectBuilder add(String key, char value) {
-        getJsonObject().addProperty(key, value);
+        jsonObject.addProperty(key, value);
         return this;
     }
 
     public JsonObjectBuilder add(String key, Number value) {
-        getJsonObject().addProperty(key, value);
+        jsonObject.addProperty(key, value);
         return this;
     }
 
     public JsonObjectBuilder add(String key, JsonElement value) {
-        getJsonObject().add(key, value);
+        jsonObject.add(key, value);
         return this;
     }
 
     public JsonObjectBuilder remove(String key) {
-        getJsonObject().remove(key);
+        jsonObject.remove(key);
         return this;
     }
 
     public JsonObject build() {
-        return getJsonObject();
+        return jsonObject;
     }
 
 }

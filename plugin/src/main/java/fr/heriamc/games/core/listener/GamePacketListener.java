@@ -27,14 +27,17 @@ public class GamePacketListener implements HeriaPacketReceiver {
     @Override
     public void execute(String s, HeriaPacket heriaPacket) {
         switch (heriaPacket) {
-            case GameJoinPacket packet -> gamePoolManager.getJoinPacketCache().put(packet.getUuid(), packet);
+            case GameJoinPacket packet -> {
+                gamePoolManager.getJoinPacketCache().put(packet.getUuid(), packet);
+                log.info("[GamePacketListener] Received a join packet from '{}' for game '{}'", packet.getUuid().toString(), packet.getGameName());
+            }
             case GameCreationRequestPacket packet -> {
                 if (!packet.getServer().equals(serverName)) return;
 
                 gamePoolManager.getGamePool(packet.getServerType()).ifPresent(pool -> pool.addGame(packet));
             }
             case GameCreatedPacket packet -> {}
-            default -> log.error("Unexpected packet received {}", heriaPacket);
+            default -> log.error("[GamePacketListener] Unexpected packet received {}", heriaPacket);
         }
     }
 

@@ -27,12 +27,12 @@ public class SlimeGameMap implements SlimeMap {
 
     @Override
     public void setSpawn(double x, double y, double z, float yaw, float pitch) {
-        setSpawn(new SinglePoint(new Location(world, x, y, z, yaw, pitch)));
+        this.spawn = new SinglePoint(new Location(world, x, y, z, yaw, pitch));
     }
 
     @Override
     public void setSpawn(double x, double y, double z) {
-        setSpawn(x, y, z, 0f, 0f);
+        this.spawn = new SinglePoint(new Location(world, x, y, z, 0f, 0f));
     }
 
     @Override
