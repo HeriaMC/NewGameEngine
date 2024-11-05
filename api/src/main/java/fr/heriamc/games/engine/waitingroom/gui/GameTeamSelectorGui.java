@@ -23,7 +23,9 @@ public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T
 
     @Override
     public void contents(Inventory inventory) {
-        setBorder(inventory, team != null ? team.getColor().getDyeColor().getData() : DyeColor.WHITE.getData());
+        var playerTeam = gamePlayer.getTeam();
+
+        setBorder(inventory, playerTeam != null ? playerTeam.getColor().getDyeColor().getData() : DyeColor.WHITE.getData());
         insertInteractItem(inventory, 31, randomItem);
 
         for (int i = 0; i < fill.length; i++) {
@@ -37,10 +39,12 @@ public class GameTeamSelectorGui<M extends Game<G, T, ?>, G extends GamePlayer<T
     }
 
     public ItemBuilder getTeamButton(T team) {
+        var playerTeam = gamePlayer.getTeam();
+
         final var builder = new ItemBuilder(Material.WOOL, 1, team.getColor().getDyeColor().getWoolData())
                 .setName(team.getColoredName() + (team.isMember(gamePlayer) ? " §a[Sélectionner]" : ""))
                 .onClick(event -> {
-                    if (this.team != null && this.team.equals(team)) return;
+                    if (playerTeam != null && playerTeam.equals(team)) return;
 
                     if (team.canJoin()) {
                         game.addPlayerToTeam(gamePlayer, team);

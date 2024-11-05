@@ -1,5 +1,7 @@
 package fr.heriamc.games.core.gui.game;
 
+import fr.heriamc.api.HeriaAPI;
+import fr.heriamc.api.user.rank.HeriaRank;
 import fr.heriamc.bukkit.HeriaBukkit;
 import fr.heriamc.bukkit.menu.HeriaMenu;
 import fr.heriamc.bukkit.menu.pagination.HeriaPaginationMenu;
@@ -52,7 +54,8 @@ public class GamePlayerListGui extends HeriaPaginationMenu<BaseGamePlayer> {
                     // SECURITY CHECK
                     if (getPlayer().getUniqueId().equals(gamePlayer.getUuid())) return;
 
-                    BukkitThreading.runTask(() -> getPlayer().teleport(gamePlayer.getLocation()));
+                    if (HeriaAPI.get().getPlayerManager().get(getPlayer().getUniqueId()).getRank().getPower() >= HeriaRank.MOD.getPower())
+                        BukkitThreading.runTask(() -> getPlayer().teleport(gamePlayer.getLocation()));
                 });
     }
 

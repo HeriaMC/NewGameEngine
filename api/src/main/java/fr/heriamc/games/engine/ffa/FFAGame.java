@@ -35,10 +35,10 @@ public abstract class FFAGame<G extends FFAGamePlayer, S extends GameSettings<?>
             settings.addBoardViewer(this, gamePlayer);
             lobby.onJoin(this, gamePlayer);
 
-            Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
-
             if (spectator)
                 Bukkit.getPluginManager().callEvent(new GamePlayerSpectateEvent<>(this, gamePlayer));
+            else
+                Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
 
             log.info("[{}] {} {} game.", getFullName(), player.getName(), spectator ? "spectate" : "joined");
         }

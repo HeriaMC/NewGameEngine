@@ -87,6 +87,10 @@ public abstract class BaseGamePlayer {
         player.closeInventory();
     }
 
+    public Player.Spigot spigot() {
+        return player.spigot();
+    }
+
     public void sendTitle(int fadeIn, int stay, int fadeOut, String title, String subtitle) {
         MultiThreading.execute(() ->
                 sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut),

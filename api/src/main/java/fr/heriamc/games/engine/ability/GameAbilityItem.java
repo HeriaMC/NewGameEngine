@@ -8,9 +8,9 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
 @Getter
-public abstract class GameAbilityItem<M extends MiniGame, E extends PlayerEvent> extends GameAbility<M, E> {
+public abstract class GameAbilityItem<M extends MiniGame, G extends BaseGamePlayer, E extends PlayerEvent> extends GameAbility<M, G, E> {
 
-    private final ItemStack itemStack;
+    protected final ItemStack itemStack;
 
     public GameAbilityItem(String name, Class<M> gameClass, Class<E> eventClass, ItemStack itemStack) {
         super(name, gameClass, eventClass);

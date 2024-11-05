@@ -80,10 +80,10 @@ public abstract class SimpleGame<G extends BaseGamePlayer, S extends GameSetting
             players.put(uuid, gamePlayer);
             settings.addBoardViewer(this, gamePlayer);
 
-            Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
-
             if (spectator)
                 Bukkit.getPluginManager().callEvent(new GamePlayerSpectateEvent<>(this, gamePlayer));
+            else
+                Bukkit.getPluginManager().callEvent(new GamePlayerJoinEvent<>(this, gamePlayer));
 
             log.info("[{}] {} {} game.", getFullName(), player.getName(), spectator ? "spectate" : "joined");
         }

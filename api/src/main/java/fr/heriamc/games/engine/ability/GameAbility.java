@@ -2,23 +2,22 @@ package fr.heriamc.games.engine.ability;
 
 import fr.heriamc.games.api.GameApi;
 import fr.heriamc.games.engine.MiniGame;
+import fr.heriamc.games.engine.player.BaseGamePlayer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEvent;
 
-import java.util.UUID;
-
 @Getter
 @Setter
-public abstract class GameAbility<M extends MiniGame, E extends PlayerEvent> implements Listener {
+public abstract class GameAbility<M extends MiniGame, G extends BaseGamePlayer, E extends PlayerEvent> implements Listener {
 
-    private final String name;
+    protected final String name;
 
     private final Class<M> gameClass;
     private final Class<E> eventClazz;
 
-    private boolean enabled;
+    protected boolean enabled;
 
     public GameAbility(String name, Class<M> gameClass, Class<E> eventClass) {
         this.name = name;
@@ -27,6 +26,6 @@ public abstract class GameAbility<M extends MiniGame, E extends PlayerEvent> imp
         GameApi.getInstance().getEventBus().registerListener(gameClass, this);
     }
 
-    public abstract void onUse(M game, UUID user, E event);
+    public abstract void onUse(M game, G user, E event);
 
 }

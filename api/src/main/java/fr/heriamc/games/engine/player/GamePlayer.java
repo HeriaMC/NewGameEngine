@@ -24,6 +24,12 @@ public abstract class GamePlayer<T extends GameTeam<?>> extends SimpleGamePlayer
         this.team = (T) team;
     }
 
+    public <G extends GamePlayer<?>> boolean sameTeam(G gamePlayer) {
+        var team = gamePlayer.getTeam();
+
+        return team != null && team.equals(this.team);
+    }
+
     public boolean hasTeam() {
         return team != null;
     }
