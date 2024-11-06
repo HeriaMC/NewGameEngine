@@ -1,9 +1,11 @@
 package fr.heriamc.games.core.listener;
 
+import fr.heriamc.api.HeriaAPI;
 import fr.heriamc.api.game.packet.GameJoinPacket;
 import fr.heriamc.games.api.pool.GamePoolManager;
 import fr.heriamc.games.engine.event.player.GamePlayerSpectateEvent;
 import fr.heriamc.games.engine.utils.CacheUtils;
+import fr.heriamc.games.engine.utils.NameTag;
 import fr.heriamc.games.engine.utils.cache.DynamicCache;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.event.EventHandler;
@@ -16,7 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.UUID;
 
 @Slf4j
-public record GameConnectionListener(GamePoolManager gamePoolManager, DynamicCache<UUID, GameJoinPacket> cache) implements Listener {
+public record GameConnectionListener(HeriaAPI heriaAPI, GamePoolManager gamePoolManager, DynamicCache<UUID, GameJoinPacket> cache) implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
@@ -26,9 +28,18 @@ public record GameConnectionListener(GamePoolManager gamePoolManager, DynamicCac
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         var player = event.getPlayer();
+        var heriaPlayer = heriaAPI.getPlayerManager().get(player.getUniqueId());
+        var rank = heriaPlayer.getRank();
         var packet = cache.getIfPresent(player.getUniqueId());
 
-        if (packet == null) return;
+
+        if (packet == null) {
+            if (rank.getPower() >= 40)
+                NameTag.setNameTag(player, rank.getPrefix(), " ", rank.getTabPriority());
+            else
+                NameTag.setNameTag(player, "§7", " ", 999);
+            return;
+        }
 
         if (packet.getGameName().contains("-"))
             gamePoolManager

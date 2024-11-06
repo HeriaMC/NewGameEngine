@@ -64,7 +64,7 @@ public class GameEngine extends JavaPlugin {
         commandManager.registerCommand(new GameCommand(heriaBukkit.getMenuManager(), gamePoolManager));
 
         gameApi.getEventBus().registerListeners(
-                new GameConnectionListener(gamePoolManager, gamePoolManager.getJoinPacketCache()),
+                new GameConnectionListener(heriaApi, gamePoolManager, gamePoolManager.getJoinPacketCache()),
                 new GameCancelListener()
         );
 
